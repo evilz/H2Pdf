@@ -5,4 +5,7 @@
   <Folder Name="/src/">
     <Project Path="src/RazorPdf/RazorPdf.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/RazorPdf.Tests/RazorPdf.Tests.csproj" />
+  </Folder>
 </Solution>

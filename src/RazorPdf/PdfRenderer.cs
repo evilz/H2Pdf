@@ -63,6 +63,16 @@ public class PdfRenderer
     /// <param name="filePath">The file path where the PDF should be saved</param>
     public void SaveToPdf(Document document, string filePath)
     {
+        if (string.IsNullOrWhiteSpace(filePath))
+            throw new ArgumentException("File path cannot be null or empty.", nameof(filePath));
+        
+        // Ensure directory exists
+        var directory = Path.GetDirectoryName(filePath);
+        if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
+        
         _logger?.LogInformation("Saving PDF to {FilePath}", filePath);
         
         var pdfRenderer = new PdfDocumentRenderer
@@ -84,11 +94,8 @@ public class PdfRenderer
         var document = new Document();
         var section = document.AddSection();
         
-        // Parse and add HTML content
-        // This is a simplified version - in a real implementation, 
-        // you would parse the HTML and convert it to MigraDoc elements
-        var paragraph = section.AddParagraph();
-        paragraph.AddText(html);
+        // Convert HTML to MigraDoc elements using the converter
+        HtmlToPdfConverter.ConvertHtmlToSection(html, section);
         
         return document;
     }

@@ -8,7 +8,7 @@ var services = new ServiceCollection();
 services.AddLogging(builder => builder.AddConsole().SetMinimumLevel(LogLevel.Information));
 services.AddRazorPdf();
 
-var serviceProvider = services.BuildServiceProvider();
+using var serviceProvider = services.BuildServiceProvider();
 
 // Get the PDF renderer
 var pdfRenderer = serviceProvider.GetRequiredService<PdfRenderer>();
@@ -37,4 +37,5 @@ catch (Exception ex)
 {
     Console.WriteLine($"Error generating PDF: {ex.Message}");
     Console.WriteLine(ex.StackTrace);
+    Environment.Exit(1);
 }

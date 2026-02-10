@@ -27,8 +27,13 @@ public class PdfDocumentBuilder
     /// <summary>
     /// Adds a heading to the current section
     /// </summary>
+    /// <param name="text">The heading text</param>
+    /// <param name="level">The heading level (1-6)</param>
     public PdfDocumentBuilder AddHeading(string text, int level = 1)
     {
+        if (level < 1 || level > 6)
+            throw new ArgumentOutOfRangeException(nameof(level), "Heading level must be between 1 and 6.");
+        
         EnsureSection();
         var paragraph = _currentSection!.AddParagraph(text);
         paragraph.Style = $"Heading{level}";

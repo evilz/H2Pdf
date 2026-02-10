@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text;
 using MigraDocCore.DocumentObjectModel;
 
@@ -22,6 +23,9 @@ public static class HtmlToPdfConverter
         // Remove HTML tags for basic text extraction
         var text = RemoveHtmlTags(html);
         
+        // Decode HTML entities
+        text = WebUtility.HtmlDecode(text);
+        
         if (!string.IsNullOrWhiteSpace(text))
         {
             var paragraph = section.AddParagraph();
@@ -36,25 +40,62 @@ public static class HtmlToPdfConverter
 
         var result = new StringBuilder();
         var inTag = false;
+        var inScript = false;
+        var inStyle = false;
+        var tagName = new StringBuilder();
+        var collectingTagName = false;
 
-        foreach (var c in html)
+        for (int i = 0; i < html.Length; i++)
         {
+            var c = html[i];
+            
             if (c == '<')
             {
                 inTag = true;
+                collectingTagName = true;
+                tagName.Clear();
                 continue;
             }
 
             if (c == '>')
             {
                 inTag = false;
+                collectingTagName = false;
+                
+                // Check if we're entering or leaving script/style tags
+                var tag = tagName.ToString().ToLowerInvariant().Trim();
+                if (tag == "script")
+                    inScript = true;
+                else if (tag == "/script")
+                    inScript = false;
+                else if (tag == "style")
+                    inStyle = true;
+                else if (tag == "/style")
+                    inStyle = false;
+                
+                tagName.Clear();
                 continue;
             }
 
-            if (!inTag)
+            if (inTag)
             {
-                result.Append(c);
+                // Collect tag name to detect script/style tags
+                if (collectingTagName && (char.IsLetter(c) || c == '/'))
+                {
+                    tagName.Append(c);
+                }
+                else if (char.IsWhiteSpace(c))
+                {
+                    collectingTagName = false;
+                }
+                continue;
             }
+
+            // Skip content inside script and style tags
+            if (inScript || inStyle)
+                continue;
+
+            result.Append(c);
         }
 
         return result.ToString().Trim();

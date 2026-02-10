@@ -1,5 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace RazorPdf;
 
@@ -13,8 +15,12 @@ public static class ServiceCollectionExtensions
     /// </summary>
     public static IServiceCollection AddRazorPdf(this IServiceCollection services)
     {
-        // Add PdfRenderer as a singleton
-        services.TryAddSingleton<PdfRenderer>();
+        // Ensure ILoggerFactory is available (use NullLoggerFactory if not already registered)
+        services.TryAddSingleton<ILoggerFactory, NullLoggerFactory>();
+        
+        // Add PdfRenderer as transient to avoid misleading singleton semantics
+        // HtmlRenderer creates new instances per call which is thread-safe
+        services.TryAddTransient<PdfRenderer>();
 
         return services;
     }

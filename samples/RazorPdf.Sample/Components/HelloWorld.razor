@@ -1,0 +1,26 @@
+<div class="greeting">
+    <h1>Hello, RazorPdf!</h1>
+    <p>Welcome @Name to PDF generation with Razor components!</p>
+    <p>This content was generated from a real Razor component (.razor file) and converted to PDF using MigraDoc.</p>
+    
+    @if (!string.IsNullOrEmpty(AdditionalMessage))
+    {
+        <p><strong>@AdditionalMessage</strong></p>
+    }
+    
+    <h2>Features Demonstrated</h2>
+    <ul>
+        <li>Razor syntax with parameter binding</li>
+        <li>Conditional rendering with <code>@@if</code> statements</li>
+        <li>HTML markup</li>
+        <li>Component parameters</li>
+    </ul>
+</div>
+
+@code {
+    [Parameter]
+    public string Name { get; set; } = "World";
+    
+    [Parameter]
+    public string? AdditionalMessage { get; set; }
+}

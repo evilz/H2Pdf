@@ -1,5 +1,4 @@
 using System.Text;
-using System.Text.Encodings.Web;
 using MigraDocCore.DocumentObjectModel;
 
 namespace RazorPdf;
@@ -58,6 +57,6 @@ public static class HtmlToPdfConverter
             }
         }
 
-        return HtmlEncoder.Default.Encode(result.ToString().Trim());
+        return result.ToString().Trim();
     }
 }

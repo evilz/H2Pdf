@@ -1,6 +1,6 @@
 using System.Text;
 using System.Text.Encodings.Web;
-using MigraDoc.DocumentObjectModel;
+using MigraDocCore.DocumentObjectModel;
 
 namespace RazorPdf;
 

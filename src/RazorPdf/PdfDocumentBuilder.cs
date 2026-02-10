@@ -1,4 +1,4 @@
-using MigraDoc.DocumentObjectModel;
+using MigraDocCore.DocumentObjectModel;
 
 namespace RazorPdf;
 

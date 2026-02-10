@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MigraDoc.DocumentObjectModel;
-using MigraDoc.Rendering;
+using MigraDocCore.DocumentObjectModel;
+using MigraDocCore.Rendering;
 
 namespace RazorPdf;
 

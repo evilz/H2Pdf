@@ -21,10 +21,11 @@ try
     // Render a component to PDF
     var parameters = new Dictionary<string, object?>
     {
-        { "Name", "Developer" }
+        { "Name", "Developer" },
+        { "AdditionalMessage", "This is a real .razor file component!" }
     };
 
-    var document = await pdfRenderer.RenderToPdfAsync<HelloWorldComponent>(parameters);
+    var document = await pdfRenderer.RenderToPdfAsync<HelloWorld>(parameters);
     
     // Save to file
     var outputPath = "sample-output.pdf";

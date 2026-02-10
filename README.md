@@ -22,20 +22,27 @@ dotnet add package RazorPdf
 
 ### 1. Create a Razor Component
 
-```csharp
-public class MyPdfComponent : ComponentBase
-{
-    [Parameter]
-    public string Title { get; set; } = "Hello PDF!";
+Create a `.razor` file (e.g., `HelloWorld.razor`):
+
+```razor
+@using Microsoft.AspNetCore.Components
+
+<div class="greeting">
+    <h1>Hello, RazorPdf!</h1>
+    <p>Welcome @Name to PDF generation with Razor components!</p>
     
-    protected override void BuildRenderTree(RenderTreeBuilder builder)
+    @if (!string.IsNullOrEmpty(Message))
     {
-        builder.OpenElement(0, "div");
-        builder.OpenElement(1, "h1");
-        builder.AddContent(2, Title);
-        builder.CloseElement();
-        builder.CloseElement();
+        <p><strong>@Message</strong></p>
     }
+</div>
+
+@code {
+    [Parameter]
+    public string Name { get; set; } = "World";
+    
+    [Parameter]
+    public string? Message { get; set; }
 }
 ```
 
@@ -56,10 +63,11 @@ var pdfRenderer = serviceProvider.GetRequiredService<PdfRenderer>();
 
 var parameters = new Dictionary<string, object?>
 {
-    { "Title", "My First PDF" }
+    { "Name", "Developer" },
+    { "Message", "This is a real .razor file component!" }
 };
 
-var document = await pdfRenderer.RenderToPdfAsync<MyPdfComponent>(parameters);
+var document = await pdfRenderer.RenderToPdfAsync<HelloWorld>(parameters);
 pdfRenderer.SaveToPdf(document, "output.pdf");
 ```
 

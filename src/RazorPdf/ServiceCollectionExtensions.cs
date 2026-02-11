@@ -19,7 +19,7 @@ public static class ServiceCollectionExtensions
         services.TryAddSingleton<ILoggerFactory, NullLoggerFactory>();
         
         // Add PdfRenderer as transient to avoid misleading singleton semantics
-        // HtmlRenderer creates new instances per call which is thread-safe
+        // PdfRenderer uses a per-call component renderer which is thread-safe
         services.TryAddTransient<PdfRenderer>();
 
         return services;

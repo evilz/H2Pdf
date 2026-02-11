@@ -1,6 +1,6 @@
 # RazorPdf
 
-RazorPdf bridges the gap between modern web UI development and PDF generation. It lets you create sophisticated PDFs using Razor components with interactive rich styling and familiar development patterns.
+RazorPdf bridges the gap between modern web UI development and PDF generation. It lets you create sophisticated PDFs using Razor components with interactive rich styling and familiar development patterns, rendering directly from a PDF VDOM without generating or parsing HTML.
 
 RazorPdf is a .NET framework that enables developers to use ASP.NET Core Razor components (typically used for web applications) to generate PDF documents. It translates the virtual DOM using a renderer to PDF using the MigraDoc Library.
 

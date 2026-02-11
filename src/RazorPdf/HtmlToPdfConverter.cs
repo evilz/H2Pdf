@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -37,6 +38,30 @@ public static class HtmlToPdfConverter
         ProcessTokens(tokens, context);
 
         // Flush any remaining buffered text
+        context.FlushText();
+    }
+
+    /// <summary>
+    /// Converts a PDF VDOM tree to MigraDoc section content.
+    /// </summary>
+    /// <param name="nodes">VDOM nodes to convert</param>
+    /// <param name="section">Target section to add content to</param>
+    internal static void ConvertVdomToSection(IReadOnlyList<PdfVdomNode>? nodes, Section section)
+    {
+        if (nodes == null || nodes.Count == 0)
+            return;
+
+        var tokens = new List<HtmlToken>();
+        foreach (var node in nodes)
+        {
+            AppendTokens(node, tokens);
+        }
+
+        if (tokens.Count == 0)
+            return;
+
+        var context = new ConversionContext(section);
+        ProcessTokens(tokens, context);
         context.FlushText();
     }
 
@@ -229,6 +254,75 @@ public static class HtmlToPdfConverter
         }
 
         return attrs;
+    }
+
+    #endregion
+
+    #region VDOM Tokenization
+
+    private static void AppendTokens(PdfVdomNode node, List<HtmlToken> tokens)
+    {
+        switch (node)
+        {
+            case PdfVdomText textNode:
+                if (!string.IsNullOrEmpty(textNode.Text))
+                {
+                    tokens.Add(new HtmlToken { Type = TokenType.Text, Content = textNode.Text });
+                }
+                break;
+
+            case PdfVdomElement elementNode:
+                var tagName = elementNode.TagName.ToLowerInvariant();
+                var attributes = BuildAttributes(elementNode.Attributes);
+
+                if (IsSelfClosingTag(tagName))
+                {
+                    tokens.Add(new HtmlToken
+                    {
+                        Type = TokenType.SelfClosingTag,
+                        TagName = tagName,
+                        Attributes = attributes
+                    });
+                    break;
+                }
+
+                tokens.Add(new HtmlToken
+                {
+                    Type = TokenType.OpenTag,
+                    TagName = tagName,
+                    Attributes = attributes
+                });
+
+                foreach (var child in elementNode.Children)
+                {
+                    AppendTokens(child, tokens);
+                }
+
+                tokens.Add(new HtmlToken
+                {
+                    Type = TokenType.CloseTag,
+                    TagName = tagName
+                });
+                break;
+        }
+    }
+
+    private static Dictionary<string, string> BuildAttributes(IReadOnlyDictionary<string, object?> attributes)
+    {
+        var results = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var (key, value) in attributes)
+        {
+            if (value == null)
+                continue;
+
+            var stringValue = Convert.ToString(value, CultureInfo.InvariantCulture);
+            if (stringValue == null)
+                continue;
+
+            results[key] = stringValue;
+        }
+
+        return results;
     }
 
     #endregion

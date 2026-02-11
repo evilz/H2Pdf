@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MigraDocCore.DocumentObjectModel;
@@ -33,23 +32,18 @@ public class PdfRenderer
         _logger?.LogInformation("Starting PDF rendering for component {ComponentType}", typeof(TComponent).Name);
 
         // Create a renderer
-        await using var htmlRenderer = new HtmlRenderer(_serviceProvider, _serviceProvider.GetRequiredService<ILoggerFactory>());
+        await using var componentRenderer = new PdfComponentRenderer(
+            _serviceProvider,
+            _serviceProvider.GetRequiredService<ILoggerFactory>());
 
-        // Render the component to HTML
-        var html = await htmlRenderer.Dispatcher.InvokeAsync(async () =>
-        {
-            var renderParameters = parameters != null 
-                ? ParameterView.FromDictionary(parameters) 
-                : ParameterView.Empty;
-            
-            var output = await htmlRenderer.RenderComponentAsync<TComponent>(renderParameters);
-            return output.ToHtmlString();
-        });
+        // Render the component to VDOM
+        var vdomNodes = await componentRenderer.RenderToVdomAsync<TComponent>(
+            parameters != null ? ParameterView.FromDictionary(parameters) : ParameterView.Empty);
 
-        _logger?.LogDebug("Component rendered to HTML. Length: {Length}", html.Length);
+        _logger?.LogDebug("Component rendered to VDOM. Node count: {Count}", vdomNodes.Count);
 
         // Create PDF document
-        var document = CreatePdfDocument(html);
+        var document = CreatePdfDocument(vdomNodes);
 
         _logger?.LogInformation("PDF document created successfully");
 
@@ -87,15 +81,15 @@ public class PdfRenderer
     }
 
     /// <summary>
-    /// Creates a PDF document from HTML content
+    /// Creates a PDF document from VDOM content
     /// </summary>
-    private Document CreatePdfDocument(string html)
+    private Document CreatePdfDocument(IReadOnlyList<PdfVdomNode> nodes)
     {
         var document = new Document();
         var section = document.AddSection();
         
-        // Convert HTML to MigraDoc elements using the converter
-        HtmlToPdfConverter.ConvertHtmlToSection(html, section);
+        // Convert VDOM to MigraDoc elements using the converter
+        HtmlToPdfConverter.ConvertVdomToSection(nodes, section);
         
         return document;
     }

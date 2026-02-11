@@ -65,6 +65,8 @@ internal class ImageTranslator : IVNodeTranslator
 
             var fullPath = Path.GetFullPath(filePath);
             var fullAllowDir = Path.GetFullPath(allowDir);
+            if (!fullAllowDir.EndsWith(Path.DirectorySeparatorChar))
+                fullAllowDir += Path.DirectorySeparatorChar;
             if (!fullPath.StartsWith(fullAllowDir, StringComparison.OrdinalIgnoreCase))
             {
                 var paragraph = ctx.CurrentCell != null

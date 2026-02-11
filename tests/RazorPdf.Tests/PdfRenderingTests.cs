@@ -11,12 +11,12 @@ public class PdfRenderingTests
     [Fact]
     public void BuildDocument_ModelWithHeadingAndParagraph_RendersContent()
     {
-        var builder = new PdfDocumentBuilder();
-        builder.AddSection()
+        var pdfBuilder = new PdfDocumentBuilder();
+        pdfBuilder.AddSection()
             .AddHeading("Title", 2)
             .AddParagraph("Hello world");
 
-        var model = builder.Build();
+        var model = pdfBuilder.Build();
         var document = PdfDocumentModelRenderer.BuildDocument(model);
 
         Assert.Single(document.Sections);
@@ -33,15 +33,15 @@ public class PdfRenderingTests
     [Fact]
     public void BuildDocument_TableModel_CreatesRowsAndColumns()
     {
-        var builder = new PdfDocumentBuilder();
-        builder.AddSection()
+        var pdfBuilder = new PdfDocumentBuilder();
+        pdfBuilder.AddSection()
             .AddTable(table =>
             {
                 table.AddHeaderRow("Col A", "Col B");
                 table.AddRow("1", "2");
             });
 
-        var document = PdfDocumentModelRenderer.BuildDocument(builder.Build());
+        var document = PdfDocumentModelRenderer.BuildDocument(pdfBuilder.Build());
         var section = document.Sections[0];
         var table = section.Elements.OfType<Table>().FirstOrDefault();
 
@@ -105,8 +105,8 @@ public class PdfRenderingTests
 
         protected override void OnInitialized()
         {
-            var builder = BuildContextAccessor.GetRequiredContext().Builder;
-            builder.AddSection()
+            var pdfBuilder = BuildContextAccessor.GetRequiredContext().Builder;
+            pdfBuilder.AddSection()
                 .AddHeading("Component Output", 1)
                 .AddParagraph(Message);
         }

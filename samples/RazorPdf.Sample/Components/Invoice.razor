@@ -7,8 +7,8 @@
 
     protected override void OnInitialized()
     {
-        var builder = BuildContextAccessor.GetRequiredContext().Builder;
-        builder.AddSection()
+        var pdfBuilder = BuildContextAccessor.GetRequiredContext().Builder;
+        pdfBuilder.AddSection()
             .AddHeading(Data.Company.Name, 1)
             .AddParagraph(Data.Company.Tagline)
             .AddHeading("Invoice", 2)
@@ -17,32 +17,32 @@
             .AddParagraph($"Issue Date: {Data.Details.IssueDate:MMMM dd, yyyy}")
             .AddParagraph($"Account #: {Data.Details.AccountNumber}");
 
-        builder.AddHeading("Invoice To", 3)
+        pdfBuilder.AddHeading("Invoice To", 3)
             .AddParagraph($"{Data.Client.Name} ({Data.Client.Role})")
             .AddParagraph($"Phone: {Data.Client.Phone}")
             .AddParagraph($"Email: {Data.Client.Email}");
 
         if (!string.IsNullOrEmpty(Data.Client.Website))
         {
-            builder.AddParagraph($"Web: {Data.Client.Website}");
+            pdfBuilder.AddParagraph($"Web: {Data.Client.Website}");
         }
 
-        builder.AddParagraph(Data.Client.Address);
+        pdfBuilder.AddParagraph(Data.Client.Address);
 
-        builder.AddHeading("Payment Method", 3)
+        pdfBuilder.AddHeading("Payment Method", 3)
             .AddParagraph(Data.Payment.Method);
 
         if (!string.IsNullOrEmpty(Data.Payment.PayPalEmail))
         {
-            builder.AddParagraph($"PayPal: {Data.Payment.PayPalEmail}");
+            pdfBuilder.AddParagraph($"PayPal: {Data.Payment.PayPalEmail}");
         }
 
         if (Data.Payment.AcceptedCards.Any())
         {
-            builder.AddParagraph($"Accepted: {string.Join(", ", Data.Payment.AcceptedCards)}");
+            pdfBuilder.AddParagraph($"Accepted: {string.Join(", ", Data.Payment.AcceptedCards)}");
         }
 
-        builder.AddHeading("Items", 3)
+        pdfBuilder.AddHeading("Items", 3)
             .AddTable(table =>
             {
                 table.AddHeaderRow("Description", "Unit Price", "Quantity", "Total");
@@ -56,16 +56,16 @@
                 }
             });
 
-        builder.AddHeading("Summary", 3)
+        pdfBuilder.AddHeading("Summary", 3)
             .AddParagraph($"Subtotal: {Data.Summary.Subtotal:C}")
             .AddParagraph($"Tax ({Data.Summary.TaxRate}%): {Data.Summary.TaxAmount:C}")
             .AddParagraph($"Discount ({Data.Summary.DiscountRate}%): -{Data.Summary.DiscountAmount:C}")
             .AddParagraph($"Grand Total: {Data.Summary.GrandTotal:C}");
 
-        builder.AddHeading("Terms & Conditions", 3)
+        pdfBuilder.AddHeading("Terms & Conditions", 3)
             .AddParagraph(Data.TermsAndConditions);
 
-        builder.AddHeading("Signature", 3)
+        pdfBuilder.AddHeading("Signature", 3)
             .AddParagraph(Data.Signature.SignatureText)
             .AddParagraph($"{Data.Signature.Name} - {Data.Signature.Title}");
     }

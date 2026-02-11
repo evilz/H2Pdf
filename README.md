@@ -34,16 +34,16 @@ Create a `.razor` file (e.g., `HelloWorld.razor`) that emits PDF content through
     [Parameter]
     public string? Message { get; set; }
 
-    protected override void OnParametersSet()
+    protected override void OnInitialized()
     {
-        var builder = PdfContextAccessor.GetRequiredContext().Builder;
-        builder.AddSection()
+        var pdfBuilder = PdfContextAccessor.GetRequiredContext().Builder;
+        pdfBuilder.AddSection()
             .AddHeading("Hello, RazorPdf!", 1)
             .AddParagraph($"Welcome {Name} to PDF generation with Razor components!");
 
         if (!string.IsNullOrEmpty(Message))
         {
-            builder.AddParagraph(paragraph =>
+            pdfBuilder.AddParagraph(paragraph =>
                 paragraph.AddText(Message, new PdfTextStyle { Bold = true }));
         }
     }

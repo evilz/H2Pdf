@@ -154,6 +154,9 @@ public sealed class PdfTableBuilder
 
     public PdfTableBuilder AddRow(bool isHeader, IEnumerable<string> cells)
     {
+        if (cells == null)
+            throw new ArgumentNullException(nameof(cells));
+
         var row = new PdfTableRowModel(isHeader);
         foreach (var cellText in cells)
         {

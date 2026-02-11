@@ -1,5 +1,5 @@
 @using RazorPdf.Sample.Models
-@inject PdfBuildContextAccessor PdfContextAccessor
+@inject PdfBuildContextAccessor BuildContextAccessor
 
 @code {
     [Parameter]
@@ -7,7 +7,7 @@
 
     protected override void OnParametersSet()
     {
-        var builder = PdfContextAccessor.GetRequiredContext().Builder;
+        var builder = BuildContextAccessor.GetRequiredContext().Builder;
         builder.AddSection()
             .AddHeading(Data.Company.Name, 1)
             .AddParagraph(Data.Company.Tagline)

@@ -1,4 +1,4 @@
-@inject PdfBuildContextAccessor PdfContextAccessor
+@inject PdfBuildContextAccessor BuildContextAccessor
 
 @code {
     [Parameter]
@@ -9,7 +9,7 @@
 
     protected override void OnParametersSet()
     {
-        var builder = PdfContextAccessor.GetRequiredContext().Builder;
+        var builder = BuildContextAccessor.GetRequiredContext().Builder;
         builder.AddSection()
             .AddHeading("Hello, RazorPdf!", 1)
             .AddParagraph($"Welcome {Name} to PDF generation with Razor components!")

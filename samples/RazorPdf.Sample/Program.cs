@@ -28,7 +28,7 @@ try
         { "AdditionalMessage", "This is a real .razor file component!" }
     };
 
-    var document = await pdfRenderer.RenderToPdfAsync<HelloWorld>(parameters);
+    var document = await pdfRenderer.RenderToDocumentAsync<HelloWorld>(parameters);
     
     var outputPath = "sample-output.pdf";
     pdfRenderer.SaveToPdf(document, outputPath);
@@ -44,7 +44,7 @@ try
         { "Data", invoiceData }
     };
 
-    var invoiceDocument = await pdfRenderer.RenderToPdfAsync<Invoice>(invoiceParameters);
+    var invoiceDocument = await pdfRenderer.RenderToDocumentAsync<Invoice>(invoiceParameters);
     
     var invoiceOutputPath = "invoice-sample.pdf";
     pdfRenderer.SaveToPdf(invoiceDocument, invoiceOutputPath);

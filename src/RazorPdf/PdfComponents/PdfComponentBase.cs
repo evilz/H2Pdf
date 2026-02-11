@@ -5,13 +5,16 @@ using RazorPdf.PdfVdom;
 namespace RazorPdf.PdfComponents;
 
 /// <summary>
-/// Base class for PDF VDOM components. Opens a VDOM element on initialization
-/// and closes it on disposal. Children are rendered via ChildContent.
+/// Base class for PDF VDOM components. Creates a VDOM element and cascades it
+/// to child components, building a tree that mirrors the component hierarchy.
 /// </summary>
-public abstract class PdfComponentBase : ComponentBase, IDisposable
+public abstract class PdfComponentBase : ComponentBase
 {
     [CascadingParameter]
     public PdfVdomBuilder? Builder { get; set; }
+
+    [CascadingParameter(Name = "ParentVElement")]
+    public VElement? ParentElement { get; set; }
 
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
@@ -31,37 +34,28 @@ public abstract class PdfComponentBase : ComponentBase, IDisposable
     /// </summary>
     protected virtual bool IsSelfClosing => false;
 
-    private bool _opened;
+    /// <summary>
+    /// The VElement node created by this component, cascaded to children.
+    /// </summary>
+    protected VElement? CurrentElement { get; private set; }
 
     protected override void OnInitialized()
     {
         if (Builder == null) return;
 
-        if (IsSelfClosing)
-        {
-            Builder.AddSelfClosingElement(ElementName, GetAttributes());
-        }
-        else
-        {
-            Builder.OpenElement(ElementName, GetAttributes());
-            _opened = true;
-        }
+        CurrentElement = Builder.CreateElement(ElementName, GetAttributes(), ParentElement);
     }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder)
     {
-        if (ChildContent != null && !IsSelfClosing)
+        if (ChildContent != null && !IsSelfClosing && CurrentElement != null)
         {
-            builder.AddContent(0, ChildContent);
-        }
-    }
-
-    public virtual void Dispose()
-    {
-        if (_opened && Builder != null)
-        {
-            Builder.CloseElement();
-            _opened = false;
+            // Cascade the current element as the parent for child components
+            builder.OpenComponent<CascadingValue<VElement>>(0);
+            builder.AddComponentParameter(1, "Name", "ParentVElement");
+            builder.AddComponentParameter(2, "Value", CurrentElement);
+            builder.AddComponentParameter(3, "ChildContent", ChildContent);
+            builder.CloseComponent();
         }
     }
 }

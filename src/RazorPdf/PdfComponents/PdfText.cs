@@ -11,6 +11,9 @@ public class PdfText : ComponentBase
     [CascadingParameter]
     public PdfVdomBuilder? Builder { get; set; }
 
+    [CascadingParameter(Name = "ParentVElement")]
+    public VElement? ParentElement { get; set; }
+
     /// <summary>
     /// The text content to add.
     /// </summary>
@@ -19,9 +22,9 @@ public class PdfText : ComponentBase
 
     protected override void OnInitialized()
     {
-        if (Builder != null && !string.IsNullOrEmpty(Value))
+        if (Builder != null && ParentElement != null && !string.IsNullOrEmpty(Value))
         {
-            Builder.AddText(Value);
+            Builder.AddText(Value, ParentElement);
         }
     }
 }

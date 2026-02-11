@@ -11,6 +11,9 @@ public class PdfImage : ComponentBase
     [CascadingParameter]
     public PdfVdomBuilder? Builder { get; set; }
 
+    [CascadingParameter(Name = "ParentVElement")]
+    public VElement? ParentElement { get; set; }
+
     /// <summary>
     /// Image source: file path string or byte[].
     /// </summary>
@@ -48,6 +51,6 @@ public class PdfImage : ComponentBase
         if (Width.HasValue) attrs["Width"] = Width.Value;
         if (Height.HasValue) attrs["Height"] = Height.Value;
 
-        Builder.AddSelfClosingElement("PdfImage", attrs);
+        Builder.CreateElement("PdfImage", attrs, ParentElement);
     }
 }

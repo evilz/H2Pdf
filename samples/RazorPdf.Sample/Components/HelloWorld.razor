@@ -1,21 +1,46 @@
-<div class="greeting">
-    <h1>Hello, RazorPdf!</h1>
-    <p>Welcome @Name to PDF generation with Razor components!</p>
-    <p>This content was generated from a real Razor component (.razor file) and converted to PDF using MigraDoc.</p>
-    
-    @if (!string.IsNullOrEmpty(AdditionalMessage))
-    {
-        <p><strong>@AdditionalMessage</strong></p>
-    }
-    
-    <h2>Features Demonstrated</h2>
-    <ul>
-        <li>Razor syntax with parameter binding</li>
-        <li>Conditional rendering with <code>@@if</code> statements</li>
-        <li>HTML markup</li>
-        <li>Component parameters</li>
-    </ul>
-</div>
+<PdfDocument>
+    <PdfSection>
+        <PdfHeading Level="1">
+            <PdfText Value="Hello, RazorPdf!" />
+        </PdfHeading>
+
+        <PdfParagraph>
+            <PdfText Value="@($"Welcome {Name} to PDF generation with Razor components!")" />
+        </PdfParagraph>
+
+        <PdfParagraph>
+            <PdfText Value="This content was generated from a real Razor component (.razor file) and converted to PDF using the VDOM pipeline." />
+        </PdfParagraph>
+
+        @if (!string.IsNullOrEmpty(AdditionalMessage))
+        {
+            <PdfParagraph>
+                <PdfBold>
+                    <PdfText Value="@AdditionalMessage" />
+                </PdfBold>
+            </PdfParagraph>
+        }
+
+        <PdfHeading Level="2">
+            <PdfText Value="Features Demonstrated" />
+        </PdfHeading>
+
+        <PdfList>
+            <PdfListItem>
+                <PdfText Value="Razor syntax with parameter binding" />
+            </PdfListItem>
+            <PdfListItem>
+                <PdfText Value="@("Conditional rendering with @if statements")" />
+            </PdfListItem>
+            <PdfListItem>
+                <PdfText Value="PDF component markup (no HTML!)" />
+            </PdfListItem>
+            <PdfListItem>
+                <PdfText Value="Component parameters" />
+            </PdfListItem>
+        </PdfList>
+    </PdfSection>
+</PdfDocument>
 
 @code {
     [Parameter]

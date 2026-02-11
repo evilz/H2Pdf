@@ -5,7 +5,7 @@
     [Parameter]
     public InvoiceData Data { get; set; } = new();
 
-    protected override void OnParametersSet()
+    protected override void OnInitialized()
     {
         var builder = BuildContextAccessor.GetRequiredContext().Builder;
         builder.AddSection()

@@ -1,438 +1,72 @@
 @using RazorPdf.Sample.Models
-
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 20px;
-        font-size: 10pt;
-    }
-    
-    .invoice-container {
-        width: 100%;
-        max-width: 800px;
-        margin: 0 auto;
-    }
-    
-    .header {
-        display: table;
-        width: 100%;
-        margin-bottom: 30px;
-    }
-    
-    .header-left {
-        display: table-cell;
-        width: 50%;
-        vertical-align: top;
-    }
-    
-    .header-right {
-        display: table-cell;
-        width: 50%;
-        text-align: right;
-        vertical-align: top;
-    }
-    
-    .logo {
-        font-size: 24pt;
-        font-weight: bold;
-        color: #333;
-        margin-bottom: 5px;
-    }
-    
-    .tagline {
-        font-size: 9pt;
-        color: #666;
-    }
-    
-    .invoice-title {
-        font-size: 36pt;
-        font-weight: bold;
-        color: #4A90E2;
-    }
-    
-    .info-section {
-        display: table;
-        width: 100%;
-        margin-bottom: 30px;
-    }
-    
-    .info-left {
-        display: table-cell;
-        width: 50%;
-        vertical-align: top;
-        padding-right: 20px;
-    }
-    
-    .info-right {
-        display: table-cell;
-        width: 50%;
-        vertical-align: top;
-        padding-left: 20px;
-    }
-    
-    .section-title {
-        font-size: 11pt;
-        font-weight: bold;
-        color: #333;
-        margin-bottom: 10px;
-        text-transform: uppercase;
-    }
-    
-    .client-info p, .payment-info p, .invoice-details p {
-        margin: 3px 0;
-        line-height: 1.4;
-    }
-    
-    .client-name {
-        font-weight: bold;
-        font-size: 11pt;
-    }
-    
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-    }
-    
-    .items-table th {
-        background-color: #4A90E2;
-        color: white;
-        padding: 10px;
-        text-align: left;
-        font-weight: bold;
-    }
-    
-    .items-table td {
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-    }
-    
-    .items-table tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-    
-    .item-description {
-        font-weight: bold;
-        margin-bottom: 3px;
-    }
-    
-    .item-details {
-        font-size: 9pt;
-        color: #666;
-    }
-    
-    .text-right {
-        text-align: right;
-    }
-    
-    .text-center {
-        text-align: center;
-    }
-    
-    .summary-section {
-        display: table;
-        width: 100%;
-        margin: 20px 0;
-    }
-    
-    .summary-left {
-        display: table-cell;
-        width: 50%;
-        vertical-align: top;
-    }
-    
-    .summary-right {
-        display: table-cell;
-        width: 50%;
-        vertical-align: top;
-        text-align: right;
-    }
-    
-    .total-due-box {
-        background-color: #f5f5f5;
-        padding: 20px;
-        border-left: 4px solid #4A90E2;
-    }
-    
-    .total-due-label {
-        font-size: 11pt;
-        color: #666;
-        margin-bottom: 5px;
-    }
-    
-    .total-due-amount {
-        font-size: 28pt;
-        font-weight: bold;
-        color: #333;
-    }
-    
-    .financial-summary {
-        padding: 10px;
-    }
-    
-    .summary-line {
-        display: table;
-        width: 100%;
-        margin: 5px 0;
-    }
-    
-    .summary-label {
-        display: table-cell;
-        text-align: left;
-    }
-    
-    .summary-value {
-        display: table-cell;
-        text-align: right;
-        font-weight: bold;
-    }
-    
-    .grand-total {
-        background-color: #4A90E2;
-        color: white;
-        padding: 10px;
-        margin-top: 10px;
-        font-size: 14pt;
-    }
-    
-    .terms-section {
-        display: table;
-        width: 100%;
-        margin: 30px 0;
-    }
-    
-    .terms-left {
-        display: table-cell;
-        width: 60%;
-        vertical-align: top;
-        padding-right: 20px;
-    }
-    
-    .terms-right {
-        display: table-cell;
-        width: 40%;
-        vertical-align: top;
-        padding-left: 20px;
-    }
-    
-    .terms-text {
-        font-size: 9pt;
-        line-height: 1.5;
-        color: #666;
-    }
-    
-    .signature {
-        margin-top: 20px;
-    }
-    
-    .signature-line {
-        font-style: italic;
-        font-size: 18pt;
-        margin-bottom: 10px;
-        color: #4A90E2;
-    }
-    
-    .signature-name {
-        font-weight: bold;
-    }
-    
-    .footer {
-        border-top: 2px solid #4A90E2;
-        padding-top: 20px;
-        margin-top: 30px;
-    }
-    
-    .footer-content {
-        display: table;
-        width: 100%;
-    }
-    
-    .footer-column {
-        display: table-cell;
-        width: 33.33%;
-        vertical-align: top;
-        padding: 0 10px;
-    }
-    
-    .footer-title {
-        font-weight: bold;
-        margin-bottom: 5px;
-        color: #4A90E2;
-    }
-    
-    .footer-text {
-        font-size: 9pt;
-        line-height: 1.4;
-    }
-    
-    .thank-you {
-        text-align: center;
-        font-size: 12pt;
-        font-weight: bold;
-        color: #4A90E2;
-        margin-top: 20px;
-    }
-</style>
-
-<div class="invoice-container">
-    <!-- Header: Logo and Invoice Title -->
-    <div class="header">
-        <div class="header-left">
-            <div class="logo">@Data.Company.LogoText</div>
-            <div class="tagline">@Data.Company.Tagline</div>
-        </div>
-        <div class="header-right">
-            <div class="invoice-title">INVOICE</div>
-        </div>
-    </div>
-    
-    <!-- Client Info and Payment/Invoice Details -->
-    <div class="info-section">
-        <div class="info-left">
-            <div class="section-title">Invoice To</div>
-            <div class="client-info">
-                <p class="client-name">@Data.Client.Name</p>
-                <p>@Data.Client.Role</p>
-                <p>Phone: @Data.Client.Phone</p>
-                <p>Email: @Data.Client.Email</p>
-                @if (!string.IsNullOrEmpty(Data.Client.Website))
-                {
-                    <p>Web: @Data.Client.Website</p>
-                }
-                <p>@Data.Client.Address</p>
-            </div>
-        </div>
-        <div class="info-right">
-            <div class="section-title">Payment Method</div>
-            <div class="payment-info">
-                <p>@Data.Payment.Method</p>
-                @if (!string.IsNullOrEmpty(Data.Payment.PayPalEmail))
-                {
-                    <p>PayPal: @Data.Payment.PayPalEmail</p>
-                }
-                @if (Data.Payment.AcceptedCards.Any())
-                {
-                    <p>Accepted: @string.Join(", ", Data.Payment.AcceptedCards)</p>
-                }
-            </div>
-            
-            <div class="section-title" style="margin-top: 20px;">Invoice Details</div>
-            <div class="invoice-details">
-                <p><strong>Invoice #:</strong> @Data.Details.InvoiceNumber</p>
-                <p><strong>Invoice Date:</strong> @Data.Details.InvoiceDate.ToString("MMMM dd, yyyy")</p>
-                <p><strong>Issue Date:</strong> @Data.Details.IssueDate.ToString("MMMM dd, yyyy")</p>
-                <p><strong>Account #:</strong> @Data.Details.AccountNumber</p>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Items Table -->
-    <table class="items-table">
-        <thead>
-            <tr>
-                <th style="width: 50%;">Items Description</th>
-                <th class="text-right" style="width: 16%;">Unit Price</th>
-                <th class="text-center" style="width: 16%;">Quantity</th>
-                <th class="text-right" style="width: 18%;">Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Data.Items)
-            {
-                <tr>
-                    <td>
-                        <div class="item-description">@item.Description</div>
-                        @if (!string.IsNullOrEmpty(item.Details))
-                        {
-                            <div class="item-details">@item.Details</div>
-                        }
-                    </td>
-                    <td class="text-right">$@item.UnitPrice.ToString("N2")</td>
-                    <td class="text-center">@item.Quantity</td>
-                    <td class="text-right">$@item.Total.ToString("N2")</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    
-    <!-- Summary Section: Total Due and Financial Summary -->
-    <div class="summary-section">
-        <div class="summary-left">
-            <div class="total-due-box">
-                <div class="total-due-label">Total Due</div>
-                <div class="total-due-amount">$@Data.Summary.GrandTotal.ToString("N2") USD</div>
-            </div>
-        </div>
-        <div class="summary-right">
-            <div class="financial-summary">
-                <div class="summary-line">
-                    <div class="summary-label">Subtotal:</div>
-                    <div class="summary-value">$@Data.Summary.Subtotal.ToString("N2")</div>
-                </div>
-                <div class="summary-line">
-                    <div class="summary-label">Tax VAT @Data.Summary.TaxRate%:</div>
-                    <div class="summary-value">$@Data.Summary.TaxAmount.ToString("N2")</div>
-                </div>
-                <div class="summary-line">
-                    <div class="summary-label">Discount / Save @Data.Summary.DiscountRate%:</div>
-                    <div class="summary-value">-$@Data.Summary.DiscountAmount.ToString("N2")</div>
-                </div>
-                <div class="summary-line grand-total">
-                    <div class="summary-label">Grand Total:</div>
-                    <div class="summary-value">$@Data.Summary.GrandTotal.ToString("N2")</div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Terms and Signature -->
-    <div class="terms-section">
-        <div class="terms-left">
-            <div class="section-title">Terms & Conditions</div>
-            <div class="terms-text">
-                <p>@Data.TermsAndConditions</p>
-            </div>
-        </div>
-        <div class="terms-right">
-            <div class="signature">
-                <div class="signature-line">@Data.Signature.SignatureText</div>
-                <div class="signature-name">@Data.Signature.Name</div>
-                <div>@Data.Signature.Title</div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Footer: Contact Information -->
-    <div class="footer">
-        <div class="footer-content">
-            <div class="footer-column">
-                <div class="footer-title">ADDRESS</div>
-                <div class="footer-text">@Data.Company.Address</div>
-            </div>
-            <div class="footer-column">
-                <div class="footer-title">PHONE</div>
-                <div class="footer-text">
-                    @Data.Company.Phone1<br/>
-                    @if (!string.IsNullOrEmpty(Data.Company.Phone2))
-                    {
-                        @Data.Company.Phone2
-                    }
-                </div>
-            </div>
-            <div class="footer-column">
-                <div class="footer-title">WEB</div>
-                <div class="footer-text">
-                    @Data.Company.Website<br/>
-                    @Data.Company.Email
-                </div>
-            </div>
-        </div>
-        <div class="thank-you">THANKS FOR YOUR BUSINESS</div>
-    </div>
-</div>
+@inject PdfBuildContextAccessor PdfContextAccessor
 
 @code {
     [Parameter]
     public InvoiceData Data { get; set; } = new();
+
+    protected override void OnParametersSet()
+    {
+        var builder = PdfContextAccessor.GetRequiredContext().Builder;
+        builder.AddSection()
+            .AddHeading(Data.Company.Name, 1)
+            .AddParagraph(Data.Company.Tagline)
+            .AddHeading("Invoice", 2)
+            .AddParagraph($"Invoice #: {Data.Details.InvoiceNumber}")
+            .AddParagraph($"Invoice Date: {Data.Details.InvoiceDate:MMMM dd, yyyy}")
+            .AddParagraph($"Issue Date: {Data.Details.IssueDate:MMMM dd, yyyy}")
+            .AddParagraph($"Account #: {Data.Details.AccountNumber}");
+
+        builder.AddHeading("Invoice To", 3)
+            .AddParagraph($"{Data.Client.Name} ({Data.Client.Role})")
+            .AddParagraph($"Phone: {Data.Client.Phone}")
+            .AddParagraph($"Email: {Data.Client.Email}");
+
+        if (!string.IsNullOrEmpty(Data.Client.Website))
+        {
+            builder.AddParagraph($"Web: {Data.Client.Website}");
+        }
+
+        builder.AddParagraph(Data.Client.Address);
+
+        builder.AddHeading("Payment Method", 3)
+            .AddParagraph(Data.Payment.Method);
+
+        if (!string.IsNullOrEmpty(Data.Payment.PayPalEmail))
+        {
+            builder.AddParagraph($"PayPal: {Data.Payment.PayPalEmail}");
+        }
+
+        if (Data.Payment.AcceptedCards.Any())
+        {
+            builder.AddParagraph($"Accepted: {string.Join(", ", Data.Payment.AcceptedCards)}");
+        }
+
+        builder.AddHeading("Items", 3)
+            .AddTable(table =>
+            {
+                table.AddHeaderRow("Description", "Unit Price", "Quantity", "Total");
+                foreach (var item in Data.Items)
+                {
+                    table.AddRow(
+                        item.Description,
+                        item.UnitPrice.ToString("C"),
+                        item.Quantity.ToString(),
+                        item.Total.ToString("C"));
+                }
+            });
+
+        builder.AddHeading("Summary", 3)
+            .AddParagraph($"Subtotal: {Data.Summary.Subtotal:C}")
+            .AddParagraph($"Tax ({Data.Summary.TaxRate}%): {Data.Summary.TaxAmount:C}")
+            .AddParagraph($"Discount ({Data.Summary.DiscountRate}%): -{Data.Summary.DiscountAmount:C}")
+            .AddParagraph($"Grand Total: {Data.Summary.GrandTotal:C}");
+
+        builder.AddHeading("Terms & Conditions", 3)
+            .AddParagraph(Data.TermsAndConditions);
+
+        builder.AddHeading("Signature", 3)
+            .AddParagraph(Data.Signature.SignatureText)
+            .AddParagraph($"{Data.Signature.Name} - {Data.Signature.Title}");
+    }
 }

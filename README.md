@@ -1,12 +1,12 @@
 # RazorPdf
 
-RazorPdf bridges the gap between modern web UI development and PDF generation. It lets you create sophisticated PDFs using Razor components with interactive rich styling and familiar development patterns.
+RazorPdf bridges the gap between modern UI development and PDF generation. It lets you create PDFs using Razor components while emitting a structured PDF document model directly.
 
-RazorPdf is a .NET framework that enables developers to use ASP.NET Core Razor components (typically used for web applications) to generate PDF documents. It translates the virtual DOM using a renderer to PDF using the MigraDoc Library.
+RazorPdf is a .NET framework that enables developers to use ASP.NET Core Razor components (typically used for web applications) to generate PDF documents. Components emit a PDF document model that is rendered deterministically to MigraDoc.
 
 ## Features
 
-- **Razor Component Rendering**: Use familiar ASP.NET Core Razor components to define PDF content
+- **Razor Component Rendering**: Use familiar ASP.NET Core Razor components to emit PDF document models
 - **Type-Safe**: Leverage C# and .NET type system for building PDF documents
 - **Fluent API**: Build PDF documents programmatically with an intuitive fluent interface
 - **Cross-Platform**: Works on Windows, Linux, and macOS thanks to PdfSharpCore and MigraDocCore
@@ -20,27 +20,33 @@ RazorPdf is a .NET framework that enables developers to use ASP.NET Core Razor c
 
 ### 1. Create a Razor Component
 
-Create a `.razor` file (e.g., `HelloWorld.razor`):
+Create a `.razor` file (e.g., `HelloWorld.razor`) that emits PDF content through the build context:
 
 ```razor
 @using Microsoft.AspNetCore.Components
 
-<div class="greeting">
-    <h1>Hello, RazorPdf!</h1>
-    <p>Welcome @Name to PDF generation with Razor components!</p>
-    
-    @if (!string.IsNullOrEmpty(Message))
-    {
-        <p><strong>@Message</strong></p>
-    }
-</div>
+@inject PdfBuildContextAccessor PdfContextAccessor
 
 @code {
     [Parameter]
     public string Name { get; set; } = "World";
-    
+
     [Parameter]
     public string? Message { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        var builder = PdfContextAccessor.GetRequiredContext().Builder;
+        builder.AddSection()
+            .AddHeading("Hello, RazorPdf!", 1)
+            .AddParagraph($"Welcome {Name} to PDF generation with Razor components!");
+
+        if (!string.IsNullOrEmpty(Message))
+        {
+            builder.AddParagraph(paragraph =>
+                paragraph.AddText(Message, new PdfTextStyle { Bold = true }));
+        }
+    }
 }
 ```
 

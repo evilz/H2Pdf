@@ -77,12 +77,31 @@ cd RazorPdf
 dotnet build
 ```
 
-## Running the Sample
+## Running the Samples
+
+The sample project demonstrates RazorPdf capabilities with two examples:
+
+1. **HelloWorld** - A simple component showing basic parameter binding and rendering
+2. **Invoice** - A complex, professional invoice with complete layout including:
+   - Header with logo and invoice title
+   - Client billing information
+   - Payment method and invoice details
+   - Items table with descriptions, prices, and totals
+   - Financial summary with subtotal, tax, discount, and grand total
+   - Terms & conditions
+   - Signature block
+   - Footer with contact information
+
+To run the samples:
 
 ```bash
 cd samples/RazorPdf.Sample
 dotnet run
 ```
+
+This will generate two PDF files:
+- `sample-output.pdf` - Simple HelloWorld example
+- `invoice-sample.pdf` - Complex invoice example
 
 ## License
 

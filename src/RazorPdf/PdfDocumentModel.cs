@@ -9,12 +9,12 @@ namespace RazorPdf;
 /// </summary>
 public sealed class PdfDocumentModel
 {
-    public IList<PdfSectionModel> Sections { get; } = new List<PdfSectionModel>();
+    public List<PdfSectionModel> Sections { get; } = new();
 }
 
 public sealed class PdfSectionModel
 {
-    public IList<PdfBlockModel> Blocks { get; } = new List<PdfBlockModel>();
+    public List<PdfBlockModel> Blocks { get; } = new();
     public Action<PageSetup>? ConfigurePageSetup { get; set; }
 }
 
@@ -45,7 +45,7 @@ public sealed class PdfParagraphModel : PdfBlockModel
         AddText(text);
     }
 
-    public IList<PdfInlineModel> Inlines { get; } = new List<PdfInlineModel>();
+    public List<PdfInlineModel> Inlines { get; } = new();
 
     public PdfParagraphModel AddText(string text, PdfTextStyle? style = null)
     {
@@ -91,7 +91,7 @@ public sealed class PdfTextStyle
 
 public sealed class PdfTableModel : PdfBlockModel
 {
-    public IList<PdfTableRowModel> Rows { get; } = new List<PdfTableRowModel>();
+    public List<PdfTableRowModel> Rows { get; } = new();
 }
 
 public sealed class PdfTableRowModel
@@ -102,10 +102,10 @@ public sealed class PdfTableRowModel
     }
 
     public bool IsHeader { get; }
-    public IList<PdfTableCellModel> Cells { get; } = new List<PdfTableCellModel>();
+    public List<PdfTableCellModel> Cells { get; } = new();
 }
 
 public sealed class PdfTableCellModel
 {
-    public IList<PdfParagraphModel> Paragraphs { get; } = new List<PdfParagraphModel>();
+    public List<PdfParagraphModel> Paragraphs { get; } = new();
 }

@@ -24,20 +24,20 @@ public sealed class PdfBuildContext
 
 public sealed class PdfBuildContextAccessor
 {
-    private readonly AsyncLocal<PdfBuildContext?> _current = new();
+    private readonly AsyncLocal<PdfBuildContext?> _currentContext = new();
 
-    public PdfBuildContext? Current => _current.Value;
+    public PdfBuildContext? Current => _currentContext.Value;
 
     public PdfBuildContext GetRequiredContext()
     {
-        return _current.Value ?? throw new InvalidOperationException("No active PdfBuildContext is available.");
+        return _currentContext.Value ?? throw new InvalidOperationException("No active PdfBuildContext is available.");
     }
 
     public IDisposable PushContext(PdfBuildContext context)
     {
-        var prior = _current.Value;
-        _current.Value = context;
-        return new ContextScope(() => _current.Value = prior);
+        var prior = _currentContext.Value;
+        _currentContext.Value = context;
+        return new ContextScope(() => _currentContext.Value = prior);
     }
 
     private sealed class ContextScope : IDisposable

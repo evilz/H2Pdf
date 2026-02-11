@@ -31,7 +31,7 @@ internal class TableRowTranslator : IVNodeTranslator
         {
             if (child is VElement ce && ce.Name == "PdfTableCell")
             {
-                if (cellIndex < row.Cells.Count)
+                if (cellIndex < ctx.TableColumnCount)
                 {
                     var cell = row.Cells[cellIndex];
                     ctx.PushCell(cell);

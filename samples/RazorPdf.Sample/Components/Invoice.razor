@@ -8,8 +8,12 @@
     protected override void OnInitialized()
     {
         var pdfBuilder = BuildContextAccessor.GetRequiredContext().Builder;
+        var companyTitle = string.IsNullOrWhiteSpace(Data.Company.LogoText)
+            ? Data.Company.Name
+            : Data.Company.LogoText;
+
         pdfBuilder.AddSection()
-            .AddHeading(Data.Company.Name, 1)
+            .AddHeading(companyTitle, 1)
             .AddParagraph(Data.Company.Tagline)
             .AddHeading("Invoice", 2)
             .AddParagraph($"Invoice #: {Data.Details.InvoiceNumber}")

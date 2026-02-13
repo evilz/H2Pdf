@@ -1,93 +1,50 @@
 # RazorPdf
 
-RazorPdf bridges the gap between modern UI development and PDF generation. It lets you create PDFs using Razor components while emitting a structured PDF document model directly. For HTML inputs, a separate `HtmlPdfRenderer` pipeline is available.
+> 🚀 Generate production-ready PDFs using Razor components and C# in minutes.
 
-RazorPdf is a .NET framework that enables developers to use ASP.NET Core Razor components (typically used for web applications) to generate PDF documents. Components emit a PDF document model that is rendered deterministically to MigraDoc.
+[![CI](https://github.com/evilz/RazorPdf/actions/workflows/ci.yml/badge.svg)](https://github.com/evilz/RazorPdf/actions/workflows/ci.yml)
+[![NuGet](https://img.shields.io/nuget/v/RazorPdf.svg)](https://www.nuget.org/packages/RazorPdf)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/evilz/RazorPdf?style=social)](https://github.com/evilz/RazorPdf/stargazers)
+[![NuGet downloads](https://img.shields.io/nuget/dt/RazorPdf.svg)](https://www.nuget.org/packages/RazorPdf)
 
-## Features
 
-- **Razor Component Rendering**: Use familiar ASP.NET Core Razor components to emit PDF document models
-- **Optional HTML Rendering**: Convert HTML strings via `HtmlPdfRenderer` when needed
-- **Type-Safe**: Leverage C# and .NET type system for building PDF documents
-- **Fluent API**: Build PDF documents programmatically with an intuitive fluent interface
-- **Cross-Platform**: Works on Windows, Linux, and macOS thanks to PdfSharpCore and MigraDocCore
-- **Dependency Injection Support**: Integrate seamlessly with ASP.NET Core DI container
+RazorPdf bridges modern .NET UI development and deterministic PDF generation. Build PDFs with familiar `.razor` components, strongly typed C#, and dependency injection.
 
-## Installation
+## ✨ Features
 
-> **Note:** RazorPdf is not yet published to NuGet. Until it is available, you should build and reference it from source. See [Building from Source](#building-from-source) for instructions.
+- Razor components as PDF templates
+- Fluent PDF document model API
+- Optional HTML-to-PDF pipeline (`HtmlPdfRenderer`)
+- ASP.NET Core dependency injection integration
+- Cross-platform rendering (Windows, Linux, macOS)
 
-## Quick Start
+## 🚀 Quick Start (30 seconds)
 
-### 1. Create a Razor Component
+**Requirements:** .NET 10 SDK
 
-Create a `.razor` file (e.g., `HelloWorld.razor`) that emits PDF content through the build context:
-
-```razor
-@using Microsoft.AspNetCore.Components
-
-@inject PdfBuildContextAccessor PdfContextAccessor
-
-@code {
-    [Parameter]
-    public string Name { get; set; } = "World";
-
-    [Parameter]
-    public string? Message { get; set; }
-
-    protected override void OnInitialized()
-    {
-        var pdfBuilder = PdfContextAccessor.GetRequiredContext().Builder;
-        pdfBuilder.AddSection()
-            .AddHeading("Hello, RazorPdf!", 1)
-            .AddParagraph($"Welcome {Name} to PDF generation with Razor components!");
-
-        if (!string.IsNullOrEmpty(Message))
-        {
-            pdfBuilder.AddParagraph(paragraph =>
-                paragraph.AddText(Message, new PdfTextStyle { Bold = true }));
-        }
-    }
-}
+```bash
+git clone https://github.com/evilz/RazorPdf.git
+cd RazorPdf
+dotnet build
+cd samples/RazorPdf.Sample
+dotnet run
 ```
 
-### 2. Configure Services
+Generated files:
 
-```csharp
-var services = new ServiceCollection();
-services.AddLogging();
-services.AddRazorPdf();
+- `sample-output.pdf`
+- `invoice-sample.pdf`
 
-var serviceProvider = services.BuildServiceProvider();
+## 📦 Installation
+
+Install via NuGet:
+
+```bash
+dotnet add package RazorPdf
 ```
 
-### 3. Render to PDF
-
-```csharp
-var pdfRenderer = serviceProvider.GetRequiredService<PdfRenderer>();
-
-var parameters = new Dictionary<string, object?>
-{
-    { "Name", "Developer" },
-    { "Message", "This is a real .razor file component!" }
-};
-
-var document = await pdfRenderer.RenderToPdfAsync<HelloWorld>(parameters);
-pdfRenderer.SaveToPdf(document, "output.pdf");
-```
-
-### Optional: Render HTML directly
-
-```csharp
-var htmlRenderer = new HtmlPdfRenderer();
-var htmlDocument = htmlRenderer.Render("""
-    <h1>Hello HTML</h1>
-    <p>This PDF was generated from HTML.</p>
-""");
-htmlRenderer.SaveToPdf(htmlDocument, "html-output.pdf");
-```
-
-## Building from Source
+Or clone from source:
 
 ```bash
 git clone https://github.com/evilz/RazorPdf.git
@@ -95,36 +52,52 @@ cd RazorPdf
 dotnet build
 ```
 
-## Running the Samples
+## 📖 Usage
 
-The sample project demonstrates RazorPdf capabilities with two examples:
+```csharp
+var services = new ServiceCollection();
+services.AddLogging();
+services.AddRazorPdf();
 
-1. **HelloWorld** - A simple component showing basic parameter binding and rendering
-2. **Invoice** - A complex, professional invoice with complete layout including:
-   - Header with logo and invoice title
-   - Client billing information
-   - Payment method and invoice details
-   - Items table with descriptions, prices, and totals
-   - Financial summary with subtotal, tax, discount, and grand total
-   - Terms & conditions
-   - Signature block
-   - Footer with contact information
+var provider = services.BuildServiceProvider();
+var renderer = provider.GetRequiredService<PdfRenderer>();
 
-To run the samples:
+var parameters = new Dictionary<string, object?>
+{
+    ["Name"] = "Developer",
+    ["Message"] = "This PDF was generated from a Razor component."
+};
 
-```bash
-cd samples/RazorPdf.Sample
-dotnet run
+var document = await renderer.RenderToPdfAsync<HelloWorld>(parameters);
+renderer.SaveToPdf(document, "output.pdf");
 ```
 
-This will generate two PDF files:
-- `sample-output.pdf` - Simple HelloWorld example
-- `invoice-sample.pdf` - Complex invoice example
+See [`samples/`](samples/) and [`examples/`](examples/) for complete usage patterns.
 
-## License
+## 🧠 Why this exists
 
-This project is licensed under the MIT License.
+Most PDF generation tools force teams to use low-level primitives or separate template systems. RazorPdf keeps PDF authoring in your existing .NET workflow with:
 
-## Contributing
+- component-driven composition
+- familiar Razor syntax
+- predictable, code-reviewable output
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+## 🛣 Roadmap
+
+See [ROADMAP.md](ROADMAP.md).
+
+## 🤝 Contributing
+
+We welcome PRs and ideas. Start with [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## ⭐ Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=evilz/RazorPdf&type=Date)](https://star-history.com/#evilz/RazorPdf&Date)
+
+## 🏗 Architecture
+
+High-level internals are documented in [Architecture.md](Architecture.md).
+
+## 📄 License
+
+MIT — see [LICENSE](LICENSE).

@@ -73,13 +73,16 @@ public sealed partial class MigraDocVisitor : IHtmlNodeVisitor
 
     public void EnterElement(IElement element)
     {
-        _elementDepth++;
         var tag = element.TagName.ToLowerInvariant();
 
         // Skip subtrees.
-        if (_skipDepth > 0) { _skipDepth++; return; }
-        if (SkipTags.Contains(tag)) { _skipDepth = 1; return; }
+        if (_skipDepth > 0 || SkipTags.Contains(tag))
+        {
+            _skipDepth++;
+            return;
+        }
 
+        _elementDepth++;
         // Resolve CSS for this element.
         var css = _cssResolver.ResolveWithInheritance(element);
         var display = css.GetValueOrDefault("display") ?? CssValueParser.GetDefaultDisplay(tag);

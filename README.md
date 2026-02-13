@@ -7,7 +7,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/evilz/RazorPdf?style=social)](https://github.com/evilz/RazorPdf/stargazers)
 [![NuGet downloads](https://img.shields.io/nuget/dt/RazorPdf.svg)](https://www.nuget.org/packages/RazorPdf)
-[![Coverage](https://img.shields.io/codecov/c/github/evilz/RazorPdf)](https://codecov.io/gh/evilz/RazorPdf)
 
 
 RazorPdf bridges modern .NET UI development and deterministic PDF generation. Build PDFs with familiar `.razor` components, strongly typed C#, and dependency injection.
@@ -21,6 +20,8 @@ RazorPdf bridges modern .NET UI development and deterministic PDF generation. Bu
 - Cross-platform rendering (Windows, Linux, macOS)
 
 ## 🚀 Quick Start (30 seconds)
+
+**Requirements:** .NET 10 SDK
 
 ```bash
 git clone https://github.com/evilz/RazorPdf.git
@@ -37,17 +38,18 @@ Generated files:
 
 ## 📦 Installation
 
-```bash
-# Until NuGet release, reference from source
-git clone https://github.com/evilz/RazorPdf.git
-cd RazorPdf
-dotnet build
-```
-
-When published, install via NuGet:
+Install via NuGet:
 
 ```bash
 dotnet add package RazorPdf
+```
+
+Or clone from source:
+
+```bash
+git clone https://github.com/evilz/RazorPdf.git
+cd RazorPdf
+dotnet build
 ```
 
 ## 📖 Usage

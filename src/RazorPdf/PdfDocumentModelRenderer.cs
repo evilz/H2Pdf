@@ -1,10 +1,11 @@
 using System;
 using System.Globalization;
+using System.Linq;
 using MigraDocCore.DocumentObjectModel;
-using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes;
 using MigraDocCore.DocumentObjectModel.Tables;
 using PdfSharpCore.Utils;
 using SixLabors.ImageSharp.PixelFormats;
+using ImageSource = MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes.ImageSource;
 
 namespace RazorPdf;
 
@@ -14,6 +15,7 @@ namespace RazorPdf;
 /// </summary>
 public static class PdfDocumentModelRenderer
 {
+    private const double DefaultContentWidthCm = 18.88;
     private static bool _imageSourceInitialized;
     private static readonly object _lock = new();
 
@@ -53,9 +55,10 @@ public static class PdfDocumentModelRenderer
             }
 
             sectionModel.ConfigurePageSetup?.Invoke(section.PageSetup);
+            var contentWidthCm = GetContentWidthCm(section, model.ContentWidthCm);
 
             foreach (var block in sectionModel.Blocks)
-                RenderBlock(section, block);
+                RenderBlock(section, block, contentWidthCm);
         }
 
         return document;
@@ -63,7 +66,7 @@ public static class PdfDocumentModelRenderer
 
     // ══════════════════════════ Block Rendering ═══════════════════════════
 
-    private static void RenderBlock(Section section, PdfBlockModel block)
+    private static void RenderBlock(Section section, PdfBlockModel block, double contentWidthCm)
     {
         switch (block)
         {
@@ -74,10 +77,10 @@ public static class PdfDocumentModelRenderer
                 RenderParagraph(section, paragraphModel);
                 break;
             case PdfTableModel tableModel:
-                RenderTable(section, tableModel);
+                RenderTable(section, tableModel, contentWidthCm);
                 break;
             case PdfDividerModel divider:
-                RenderDivider(section, divider);
+                RenderDivider(section, divider, contentWidthCm);
                 break;
             case PdfImageModel image:
                 RenderBlockImage(section, image);
@@ -145,7 +148,7 @@ public static class PdfDocumentModelRenderer
 
     // ══════════════════════════ Dividers ══════════════════════════════════
 
-    private static void RenderDivider(Section section, PdfDividerModel divider)
+    private static void RenderDivider(Section section, PdfDividerModel divider, double contentWidthCm)
     {
         // Space before the line.
         if (divider.SpaceBefore > 0)
@@ -158,7 +161,7 @@ public static class PdfDocumentModelRenderer
         // Render a thin colored table row as a horizontal line.
         var table = new Table();
         table.Borders.Width = 0;
-        table.AddColumn(Unit.FromCentimeter(18.88));
+        table.AddColumn(Unit.FromCentimeter(contentWidthCm));
         var row = table.AddRow();
         var thickness = Math.Max(divider.Thickness, 1.0);
         row.Height = Unit.FromPoint(thickness);
@@ -217,7 +220,7 @@ public static class PdfDocumentModelRenderer
 
     // ══════════════════════════ Tables ════════════════════════════════════
 
-    private static void RenderTable(Section section, PdfTableModel tableModel)
+    private static void RenderTable(Section section, PdfTableModel tableModel, double contentWidthCm)
     {
         var table = new Table();
         var columnCount = DetermineColumnCount(tableModel);
@@ -236,7 +239,8 @@ public static class PdfDocumentModelRenderer
         }
         else
         {
-            var columnWidth = Unit.FromCentimeter(18.88 / columnCount);
+            var effectiveWidth = contentWidthCm > 0 ? contentWidthCm : DefaultContentWidthCm;
+            var columnWidth = Unit.FromCentimeter(effectiveWidth / columnCount);
             for (var i = 0; i < columnCount; i++)
                 table.AddColumn(columnWidth);
         }
@@ -287,6 +291,9 @@ public static class PdfDocumentModelRenderer
                 {
                     var pad = Unit.FromPoint(cellModel.PaddingPt.Value);
                     cell.Format.LeftIndent = pad;
+                    cell.Format.RightIndent = pad;
+                    cell.Format.SpaceBefore = pad;
+                    cell.Format.SpaceAfter = pad;
                 }
 
                 // Cell alignment.
@@ -364,27 +371,22 @@ public static class PdfDocumentModelRenderer
     {
         foreach (var row in nestedTable.Rows)
         {
-            foreach (var cell in row.Cells)
-            {
-                foreach (var block in cell.Blocks)
+                foreach (var cell in row.Cells)
                 {
-                    if (block is PdfParagraphModel pm)
-                        RenderParagraphInCell(parentCell, pm);
+                    foreach (var paragraph in cell.Blocks.OfType<PdfParagraphModel>())
+                        RenderParagraphInCell(parentCell, paragraph);
+                    // Also check Paragraphs for backward compat.
+                    foreach (var paragraph in cell.Paragraphs)
+                        RenderParagraphInCell(parentCell, paragraph);
                 }
-                // Also check Paragraphs for backward compat.
-                foreach (var pm in cell.Paragraphs)
-                    RenderParagraphInCell(parentCell, pm);
             }
         }
-    }
 
     private static int DetermineColumnCount(PdfTableModel tableModel)
     {
-        int max = 0;
-        foreach (var row in tableModel.Rows)
-            if (row.Cells.Count > max)
-                max = row.Cells.Count;
-        return max;
+        return tableModel.Rows.Count == 0
+            ? 0
+            : tableModel.Rows.Max(row => row.Cells.Count);
     }
 
     // ══════════════════════════ Style Application ═════════════════════════
@@ -473,17 +475,30 @@ public static class PdfDocumentModelRenderer
         if (hex.Length == 4 && hex[0] == '#')
             hex = $"#{hex[1]}{hex[1]}{hex[2]}{hex[2]}{hex[3]}{hex[3]}";
 
-        if (hex.Length == 7 && hex[0] == '#')
+        if (hex.Length == 7 && hex[0] == '#' &&
+            byte.TryParse(hex[1..3], NumberStyles.HexNumber, null, out var r) &&
+            byte.TryParse(hex[3..5], NumberStyles.HexNumber, null, out var g) &&
+            byte.TryParse(hex[5..7], NumberStyles.HexNumber, null, out var b))
         {
-            if (byte.TryParse(hex[1..3], NumberStyles.HexNumber, null, out var r) &&
-                byte.TryParse(hex[3..5], NumberStyles.HexNumber, null, out var g) &&
-                byte.TryParse(hex[5..7], NumberStyles.HexNumber, null, out var b))
-            {
-                return new Color(r, g, b);
-            }
+            return new Color(r, g, b);
         }
 
         return null;
+    }
+
+    private static double GetContentWidthCm(Section section, double? overrideWidthCm)
+    {
+        if (overrideWidthCm.HasValue && overrideWidthCm.Value > 0)
+            return overrideWidthCm.Value;
+
+        var widthPt = section.PageSetup.PageWidth.Point
+                      - section.PageSetup.LeftMargin.Point
+                      - section.PageSetup.RightMargin.Point;
+
+        if (widthPt <= 0)
+            return DefaultContentWidthCm;
+
+        return Unit.FromPoint(widthPt).Centimeter;
     }
 
     private static void EnsureImageSource()

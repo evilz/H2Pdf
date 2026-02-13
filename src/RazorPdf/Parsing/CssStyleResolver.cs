@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Text.RegularExpressions;
 using AngleSharp.Dom;
 
@@ -45,13 +46,10 @@ public sealed partial class CssStyleResolver
     {
         var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-        foreach (var rule in _rules)
+        foreach (var rule in _rules.Where(rule => MatchesSelector(element, rule.Selector)))
         {
-            if (MatchesSelector(element, rule.Selector))
-            {
-                foreach (var (key, value) in rule.Properties)
-                    result[key] = value;
-            }
+            foreach (var (key, value) in rule.Properties)
+                result[key] = value;
         }
 
         // Inline style (highest priority)
@@ -105,11 +103,11 @@ public sealed partial class CssStyleResolver
             var propertiesText = match.Groups[2].Value.Trim();
             var properties = ParseProperties(propertiesText);
 
-            foreach (var selector in selectors.Split(','))
+            foreach (var trimmed in selectors.Split(',')
+                         .Select(selector => selector.Trim())
+                         .Where(trimmed => !string.IsNullOrEmpty(trimmed)))
             {
-                var trimmed = selector.Trim();
-                if (!string.IsNullOrEmpty(trimmed))
-                    _rules.Add(new CssRule(trimmed, properties));
+                _rules.Add(new CssRule(trimmed, properties));
             }
         }
     }

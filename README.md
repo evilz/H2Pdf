@@ -1,12 +1,13 @@
 # RazorPdf
 
-RazorPdf bridges the gap between modern UI development and PDF generation. It lets you create PDFs using Razor components while emitting a structured PDF document model directly.
+RazorPdf bridges the gap between modern UI development and PDF generation. It lets you create PDFs using Razor components while emitting a structured PDF document model directly. For HTML inputs, a separate `HtmlPdfRenderer` pipeline is available.
 
 RazorPdf is a .NET framework that enables developers to use ASP.NET Core Razor components (typically used for web applications) to generate PDF documents. Components emit a PDF document model that is rendered deterministically to MigraDoc.
 
 ## Features
 
 - **Razor Component Rendering**: Use familiar ASP.NET Core Razor components to emit PDF document models
+- **Optional HTML Rendering**: Convert HTML strings via `HtmlPdfRenderer` when needed
 - **Type-Safe**: Leverage C# and .NET type system for building PDF documents
 - **Fluent API**: Build PDF documents programmatically with an intuitive fluent interface
 - **Cross-Platform**: Works on Windows, Linux, and macOS thanks to PdfSharpCore and MigraDocCore
@@ -73,6 +74,17 @@ var parameters = new Dictionary<string, object?>
 
 var document = await pdfRenderer.RenderToPdfAsync<HelloWorld>(parameters);
 pdfRenderer.SaveToPdf(document, "output.pdf");
+```
+
+### Optional: Render HTML directly
+
+```csharp
+var htmlRenderer = new HtmlPdfRenderer();
+var htmlDocument = htmlRenderer.Render("""
+    <h1>Hello HTML</h1>
+    <p>This PDF was generated from HTML.</p>
+""");
+htmlRenderer.SaveToPdf(htmlDocument, "html-output.pdf");
 ```
 
 ## Building from Source

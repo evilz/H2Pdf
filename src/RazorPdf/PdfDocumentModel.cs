@@ -19,6 +19,9 @@ public sealed class PdfDocumentModel
 
     /// <summary>Page margin in points (applied to all sides).</summary>
     public double? PageMarginPt { get; set; }
+
+    /// <summary>Preferred content width in centimeters for layout calculations.</summary>
+    public double? ContentWidthCm { get; set; }
 }
 
 public sealed class PdfSectionModel

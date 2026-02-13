@@ -143,26 +143,22 @@ public static partial class CssValueParser
 
         // rgb(r, g, b)
         var rgbMatch = RgbRegex().Match(value);
-        if (rgbMatch.Success)
+        if (rgbMatch.Success &&
+            int.TryParse(rgbMatch.Groups[1].Value, out var r) &&
+            int.TryParse(rgbMatch.Groups[2].Value, out var g) &&
+            int.TryParse(rgbMatch.Groups[3].Value, out var b))
         {
-            if (int.TryParse(rgbMatch.Groups[1].Value, out var r) &&
-                int.TryParse(rgbMatch.Groups[2].Value, out var g) &&
-                int.TryParse(rgbMatch.Groups[3].Value, out var b))
-            {
-                return $"#{r:x2}{g:x2}{b:x2}";
-            }
+            return $"#{r:x2}{g:x2}{b:x2}";
         }
 
         // rgba(r, g, b, a) - ignore alpha
         var rgbaMatch = RgbaRegex().Match(value);
-        if (rgbaMatch.Success)
+        if (rgbaMatch.Success &&
+            int.TryParse(rgbaMatch.Groups[1].Value, out r) &&
+            int.TryParse(rgbaMatch.Groups[2].Value, out g) &&
+            int.TryParse(rgbaMatch.Groups[3].Value, out b))
         {
-            if (int.TryParse(rgbaMatch.Groups[1].Value, out var r) &&
-                int.TryParse(rgbaMatch.Groups[2].Value, out var g) &&
-                int.TryParse(rgbaMatch.Groups[3].Value, out var b))
-            {
-                return $"#{r:x2}{g:x2}{b:x2}";
-            }
+            return $"#{r:x2}{g:x2}{b:x2}";
         }
 
         return null;

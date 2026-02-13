@@ -240,7 +240,6 @@ public sealed partial class MigraDocVisitor : IHtmlNodeVisitor
         if (_skipDepth > 0)
         {
             _skipDepth--;
-            if (_skipDepth == 0) _elementDepth--;
             return;
         }
 

@@ -122,6 +122,7 @@ public class HtmlPdfRenderer
         model.DefaultFontName = options.DefaultFontName;
         model.DefaultFontSize = options.DefaultFontSize;
         model.PageMarginPt = options.PageMarginPt;
+        model.ContentWidthCm = options.ContentWidthCm;
 
         _logger?.LogInformation(
             "HTML converted: {Sections} section(s), {Blocks} block(s)",

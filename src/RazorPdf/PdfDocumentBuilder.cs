@@ -161,7 +161,6 @@ public sealed class PdfTableBuilder
         foreach (var cellText in cells)
         {
             var cell = new PdfTableCellModel();
-            cell.Paragraphs.Add(new PdfParagraphModel(cellText));
             cell.Blocks.Add(new PdfParagraphModel(cellText));
             row.Cells.Add(cell);
         }

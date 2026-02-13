@@ -1,0 +1,246 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoice</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            padding: 40px 0;
+        }
+
+        .invoice {
+            width: 800px;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 18px;
+        }
+
+        .logo img {
+            width: 100px;
+
+        }
+
+        .divider {
+            border-top: 1px solid #aaa;
+            margin: 30px 0;
+        }
+
+        .info-section {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .info-block {
+            width: 30%;
+            font-size: 14px;
+        }
+
+        .info-block strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .meta {
+            text-align: right;
+            font-size: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        th {
+            background: #f0f0f0;
+            text-align: left;
+        }
+
+        .totals {
+            width: 300px;
+            margin-left: auto;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .totals div {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+        }
+
+        .total-final {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .signature {
+            margin-top: 40px;
+            text-align: right;
+            font-style: italic;
+            font-size: 22px;
+        }
+
+        .footer {
+            margin-top: 80px;
+            font-size: 13px;
+        }
+
+        .footer strong {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        @media print {
+            .invoice {
+                box-shadow: none !important;
+            }
+
+            body {
+                background: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="invoice">
+
+        <div class="header">
+            <div>
+                <h2>John Smith</h2>
+                <p>
+                    4490 Oak Drive<br>
+                    Albany, NY 12210
+                </p>
+            </div>
+
+            <div class="logo"><img src="logo.png"></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="info-section">
+            <div class="info-block">
+                <strong>Bill To</strong>
+                Jessie M Horne<br>
+                4312 Wood Road<br>
+                New York, NY 10031
+            </div>
+
+            <div class="info-block">
+                <strong>Ship To</strong>
+                Jessie M Horne<br>
+                2019 Redbud Drive<br>
+                New York, NY 10011
+            </div>
+
+            <div class="meta">
+                <div><strong>Invoice Date</strong> 11/02/2019</div>
+                <div><strong>P.O.#</strong> 2412/2019</div>
+                <div><strong>Due Date</strong> 26/02/2019</div>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Qty</th>
+                    <th>Description</th>
+                    <th>Unit Price</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Front and rear brake cables</td>
+                    <td>100.00</td>
+                    <td>100.00</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>New set of pedal arms</td>
+                    <td>25.00</td>
+                    <td>50.00</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Labor 3hrs</td>
+                    <td>15.00</td>
+                    <td>45.00</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="totals">
+            <div>
+                <span>Subtotal</span>
+                <span>195.00</span>
+            </div>
+            <div>
+                <span>Sales Tax 5.0%</span>
+                <span>9.75</span>
+            </div>
+            <div class="total-final">
+                <span>Total</span>
+                <span>$204.75</span>
+            </div>
+        </div>
+
+        <div class="signature">
+            John Smith
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="footer">
+            <strong>Terms & Conditions</strong>
+            Payment is due within 15 days<br><br>
+
+            Name of Bank<br>
+            Account number: 1234567890<br>
+            Routing: 098765432
+        </div>
+
+    </div>
+
+</body>
+
+</html>

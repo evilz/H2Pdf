@@ -8,6 +8,11 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="..\invoice-sample.html" Link="invoice-sample.html" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\logo.png" Link="logo.png" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net10.0</TargetFramework>

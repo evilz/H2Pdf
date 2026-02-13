@@ -51,6 +51,25 @@ try
     
     Console.WriteLine($"✓ Invoice PDF generated: {Path.GetFullPath(invoiceOutputPath)}");
     Console.WriteLine();
+
+    // Example 3: HTML string to PDF (using invoice-sample.html)
+    Console.WriteLine("Generating PDF from HTML string (invoice-sample.html)...");
+    var basePath = AppContext.BaseDirectory;
+    var htmlContent = await File.ReadAllTextAsync(Path.Combine(basePath, "invoice-sample.html"));
+    var htmlRenderer = serviceProvider.GetRequiredService<HtmlPdfRenderer>();
+    var htmlOptions = new HtmlPdfOptions
+    {
+        BasePath = basePath,
+        DefaultFontName = "Arial",
+        DefaultFontSize = 12,
+    };
+    var htmlDocument = await htmlRenderer.RenderAsync(htmlContent, htmlOptions);
+
+    var htmlOutputPath = "invoice-from-html.pdf";
+    htmlRenderer.SaveToPdf(htmlDocument, htmlOutputPath);
+
+    Console.WriteLine($"✓ HTML Invoice PDF generated: {Path.GetFullPath(htmlOutputPath)}");
+    Console.WriteLine();
     Console.WriteLine("All samples generated successfully!");
 }
 catch (Exception ex)

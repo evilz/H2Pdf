@@ -162,6 +162,7 @@ public sealed class PdfTableBuilder
         {
             var cell = new PdfTableCellModel();
             cell.Paragraphs.Add(new PdfParagraphModel(cellText));
+            cell.Blocks.Add(new PdfParagraphModel(cellText));
             row.Cells.Add(cell);
         }
         _table.Rows.Add(row);

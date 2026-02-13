@@ -40,6 +40,11 @@ ScaffoldingReadMe.txt
 ~$*
 *~
 CodeCoverage/
+diagnostic.csx
+
+# Rider/IntelliJ
+.idea/
+*.DotSettings.user
 
 # MSBuild Binary and Structured Log
 *.binlog

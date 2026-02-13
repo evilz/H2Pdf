@@ -21,6 +21,8 @@ public static class ServiceCollectionExtensions
         // Add PdfRenderer as transient to avoid misleading singleton semantics
         // HtmlRenderer creates new instances per call which is thread-safe
         services.TryAddTransient<PdfRenderer>();
+        services.TryAddTransient<HtmlPdfRenderer>();
+        services.TryAddSingleton<PdfBuildContextAccessor>();
 
         return services;
     }

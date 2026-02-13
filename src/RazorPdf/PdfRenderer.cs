@@ -30,26 +30,39 @@ public class PdfRenderer
     public async Task<Document> RenderToPdfAsync<TComponent>(IDictionary<string, object?>? parameters = null) 
         where TComponent : IComponent
     {
+        return await RenderToPdfAsync<TComponent>(null, parameters);
+    }
+
+    /// <summary>
+    /// Renders a Razor component to a PDF document
+    /// </summary>
+    /// <typeparam name="TComponent">The Razor component type to render</typeparam>
+    /// <param name="options">Rendering options for the PDF document</param>
+    /// <param name="parameters">Parameters to pass to the component</param>
+    /// <returns>A MigraDoc Document object</returns>
+    public async Task<Document> RenderToPdfAsync<TComponent>(PdfRenderOptions? options, IDictionary<string, object?>? parameters = null)
+        where TComponent : IComponent
+    {
         _logger?.LogInformation("Starting PDF rendering for component {ComponentType}", typeof(TComponent).Name);
 
         // Create a renderer
         await using var htmlRenderer = new HtmlRenderer(_serviceProvider, _serviceProvider.GetRequiredService<ILoggerFactory>());
+        var buildContext = new PdfBuildContext(options);
+        var contextAccessor = _serviceProvider.GetRequiredService<PdfBuildContextAccessor>();
 
-        // Render the component to HTML
-        var html = await htmlRenderer.Dispatcher.InvokeAsync(async () =>
+        // Render the component once to build the PDF model
+        await htmlRenderer.Dispatcher.InvokeAsync(async () =>
         {
             var renderParameters = parameters != null 
                 ? ParameterView.FromDictionary(parameters) 
                 : ParameterView.Empty;
-            
-            var output = await htmlRenderer.RenderComponentAsync<TComponent>(renderParameters);
-            return output.ToHtmlString();
+
+            using var contextScope = contextAccessor.PushContext(buildContext);
+            await htmlRenderer.RenderComponentAsync<TComponent>(renderParameters);
         });
 
-        _logger?.LogDebug("Component rendered to HTML. Length: {Length}", html.Length);
-
         // Create PDF document
-        var document = CreatePdfDocument(html);
+        var document = CreatePdfDocument(buildContext.Build());
 
         _logger?.LogInformation("PDF document created successfully");
 
@@ -87,16 +100,10 @@ public class PdfRenderer
     }
 
     /// <summary>
-    /// Creates a PDF document from HTML content
+    /// Creates a PDF document from a PDF document model
     /// </summary>
-    private Document CreatePdfDocument(string html)
+    private static Document CreatePdfDocument(PdfDocumentModel model)
     {
-        var document = new Document();
-        var section = document.AddSection();
-        
-        // Convert HTML to MigraDoc elements using the converter
-        HtmlToPdfConverter.ConvertHtmlToSection(html, section);
-        
-        return document;
+        return PdfDocumentModelRenderer.BuildDocument(model);
     }
 }

@@ -3,6 +3,9 @@
     <Project Path="samples/PlaywrightPdf/PlaywrightPdf.csproj" />
     <Project Path="samples/RazorPdf.Sample/RazorPdf.Sample.csproj" />
   </Folder>
+  <Folder Name="/benchmarks/">
+    <Project Path="benchmarks/RazorPdf.Benchmarks/RazorPdf.Benchmarks.csproj" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/RazorPdf/RazorPdf.csproj" />
   </Folder>

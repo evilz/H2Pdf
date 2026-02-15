@@ -74,6 +74,72 @@ renderer.SaveToPdf(document, "output.pdf");
 
 See [`samples/`](samples/) and [`examples/`](examples/) for complete usage patterns.
 
+## ⚡ Benchmark
+
+Compare Playwright HTML-to-PDF with RazorPdf HTML-to-MigraDoc rendering:
+
+```bash
+dotnet build benchmarks/RazorPdf.Benchmarks
+pwsh benchmarks/RazorPdf.Benchmarks/bin/Debug/net10.0/playwright.ps1 install chromium
+dotnet run -c Release --project benchmarks/RazorPdf.Benchmarks
+```
+
+**Environment**
+
+-   BenchmarkDotNet v0.14.0
+-   .NET 10.0.2 (RyuJIT, AVX2)
+-   Windows 11 x64
+-   GC: Concurrent Workstation
+
+
+### 🧪 Benchmarked Pipelines
+
+1.  **Playwright (Chromium)**
+    -   HTML rendered in headless Chromium
+    -   PDF generated via `Page.PdfAsync()`
+
+2.  **MigraDoc (via HtmlPdfRenderer)**
+    -   HTML → MigraDoc DOM
+    -   MigraDoc → PDF via `PdfDocumentRenderer`
+
+
+### 📈 Example output (single run)
+
+| Method | Mean | StdDev | Gen0 | Gen1 | Allocated |
+| --- | --- | --- | --- | --- | --- |
+| PlaywrightHtmlToPdfAsync | 9.231 ms | 0.196 ms | 15.63 | - | 188 KB |
+| MigraDoc_HtmlToPdf | 4.684 ms | 0.014 ms | 312.50 | 109.38 | 2.68 MB |
+
+> These numbers are an example from one environment and one HTML payload.  
+> Results will vary by machine, OS, runtime version, browser version, and template complexity.
+
+### ⏱ Latency per PDF (example)
+
+-   MigraDoc: ~4.68 ms
+-   Playwright: ~9.23 ms
+
+### 📊 Stability (Jitter, example)
+
+| Pipeline | StdDev |
+| --- | --- |
+| MigraDoc | 0.014 ms |
+| Playwright | 0.196 ms |
+
+### 🧠 Memory Behavior (example)
+
+| Pipeline | Allocated per PDF |
+| --- | --- |
+| Playwright | ~188 KB |
+| MigraDoc | ~2.68 MB |
+
+GC activity:
+
+-   MigraDoc → Triggers Gen0 + Gen1
+-   Playwright → Mostly Gen0 only
+
+Use benchmark output in your environment to compare trade-offs for your workloads.
+
+
 ## 🧠 Why this exists
 
 Most PDF generation tools force teams to use low-level primitives or separate template systems. RazorPdf keeps PDF authoring in your existing .NET workflow with:

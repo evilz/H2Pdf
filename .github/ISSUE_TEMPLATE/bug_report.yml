@@ -4,7 +4,7 @@ labels: [bug]
 body:
   - type: markdown
     attributes:
-      value: Thanks for helping improve RazorPdf.
+      value: Thanks for helping improve H2Pdf.
   - type: textarea
     id: summary
     attributes:

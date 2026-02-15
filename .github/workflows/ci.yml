@@ -19,13 +19,13 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Restore
-        run: dotnet restore RazorPdf.slnx
+        run: dotnet restore H2Pdf.slnx
 
       - name: Build
-        run: dotnet build RazorPdf.slnx --configuration Release --no-restore
+        run: dotnet build H2Pdf.slnx --configuration Release --no-restore
 
       - name: Test
-        run: dotnet test RazorPdf.slnx --configuration Release --no-build
+        run: dotnet test H2Pdf.slnx --configuration Release --no-build
 
       - name: Pack
-        run: dotnet pack src/RazorPdf/RazorPdf.csproj --configuration Release --no-build --output ./artifacts
+        run: dotnet pack src/H2Pdf/H2Pdf.csproj --configuration Release --no-build --output ./artifacts

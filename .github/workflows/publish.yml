@@ -1,12 +1,11 @@
-name: CI
+name: Publish
 
 on:
-  push:
-    branches: ["main"]
-  pull_request:
+  release:
+    types: [published]
 
 jobs:
-  build-test:
+  publish:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -31,3 +30,6 @@ jobs:
 
       - name: Pack
         run: dotnet pack src/H2Pdf/H2Pdf.csproj --configuration Release --no-build --output ./artifacts
+
+      - name: Push to NuGet
+        run: dotnet nuget push ./artifacts/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate

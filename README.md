@@ -79,6 +79,7 @@ See [`samples/`](samples/) and [`examples/`](examples/) for complete usage patte
 Compare Playwright HTML-to-PDF with RazorPdf HTML-to-MigraDoc rendering:
 
 ```bash
+playwright install chromium
 dotnet run -c Release --project benchmarks/RazorPdf.Benchmarks
 ```
 

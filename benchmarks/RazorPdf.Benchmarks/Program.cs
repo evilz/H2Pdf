@@ -40,17 +40,17 @@ public class PdfPipelineBenchmarks
 
     private IPlaywright? _playwright;
     private IBrowser? _browser;
+    private IPage? _page;
 
     [GlobalSetup]
     public async Task SetupAsync()
     {
-        Microsoft.Playwright.Program.Main(["install", "chromium"]);
-
         _playwright = await Playwright.CreateAsync();
         _browser = await _playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
         {
             Headless = true
         });
+        _page = await _browser.NewPageAsync();
     }
 
     [GlobalCleanup]
@@ -67,16 +67,17 @@ public class PdfPipelineBenchmarks
     [Benchmark]
     public async Task<byte[]> PlaywrightHtmlToPdfAsync()
     {
-        var page = await _browser!.NewPageAsync();
-        await page.SetContentAsync(_html);
+        if (_page is null)
+        {
+            throw new InvalidOperationException("Playwright page is not initialized. Ensure GlobalSetup completed successfully.");
+        }
 
-        var pdf = await page.PdfAsync(new PagePdfOptions
+        await _page.SetContentAsync(_html);
+
+        return await _page.PdfAsync(new PagePdfOptions
         {
             Format = "A4"
         });
-
-        await page.CloseAsync();
-        return pdf;
     }
 
     [Benchmark]

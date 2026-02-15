@@ -99,8 +99,8 @@ public class PdfPipelineBenchmarks
             ViewportSize = new() { Width = 1280, Height = 720 }
         });
 
-        // Create one page and reuse it.
-        _page = await _browser.NewPageAsync();
+        // Create one page within the configured context and reuse it.
+        _page = await _context.NewPageAsync();
         
         // ------------------------------------------------------------
         // Prime / warm-up both pipelines once:

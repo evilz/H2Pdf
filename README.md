@@ -79,7 +79,8 @@ See [`samples/`](samples/) and [`examples/`](examples/) for complete usage patte
 Compare Playwright HTML-to-PDF with RazorPdf HTML-to-MigraDoc rendering:
 
 ```bash
-playwright install chromium
+dotnet build benchmarks/RazorPdf.Benchmarks
+pwsh benchmarks/RazorPdf.Benchmarks/bin/Debug/net10.0/playwright.ps1 install chromium
 dotnet run -c Release --project benchmarks/RazorPdf.Benchmarks
 ```
 
@@ -102,80 +103,41 @@ dotnet run -c Release --project benchmarks/RazorPdf.Benchmarks
     -   MigraDoc → PDF via `PdfDocumentRenderer`
 
 
-### 📈 Summary
+### 📈 Example output (single run)
 
 | Method | Mean | StdDev | Gen0 | Gen1 | Allocated |
 | --- | --- | --- | --- | --- | --- |
 | PlaywrightHtmlToPdfAsync | 9.231 ms | 0.196 ms | 15.63 | - | 188 KB |
 | MigraDoc_HtmlToPdf | 4.684 ms | 0.014 ms | 312.50 | 109.38 | 2.68 MB |
 
-### ⏱ Latency per PDF
+> These numbers are an example from one environment and one HTML payload.  
+> Results will vary by machine, OS, runtime version, browser version, and template complexity.
 
--   **MigraDoc**: ~4.68 ms
+### ⏱ Latency per PDF (example)
 
--   **Playwright**: ~9.23 ms
+-   MigraDoc: ~4.68 ms
+-   Playwright: ~9.23 ms
 
-### 👉 MigraDoc is approximately **2× faster**
-
-Estimated theoretical throughput:
-
--   MigraDoc → ~210 PDFs/sec
--   Playwright → ~108 PDFs/sec
-
-### 📊 Stability (Jitter)
+### 📊 Stability (Jitter, example)
 
 | Pipeline | StdDev |
 | --- | --- |
 | MigraDoc | 0.014 ms |
 | Playwright | 0.196 ms |
 
-👉 MigraDoc is extremely deterministic\
-👉 Playwright shows small browser-engine variance (expected)
-
-### 🧠 Memory Behavior (Important!)
+### 🧠 Memory Behavior (example)
 
 | Pipeline | Allocated per PDF |
 | --- | --- |
 | Playwright | ~188 KB |
 | MigraDoc | ~2.68 MB |
 
-👉 MigraDoc allocates **~14× more memory per PDF**
-
 GC activity:
 
 -   MigraDoc → Triggers Gen0 + Gen1
 -   Playwright → Mostly Gen0 only
 
-### 🎯 Conclusions
-
-#### ✅ MigraDoc
-
-✔ Much faster\
-✔ Very stable\
-✔ Great for controlled layouts (invoices, reports)\
-❌ High memory allocations\
-❌ More GC pressure at scale\
-❌ Limited HTML/CSS support
-
-Best for:
-
--   High-throughput backend services
--   Deterministic rendering
--   Controlled templates
-
-
-#### ✅ Playwright
-
-✔ Full Chromium rendering (accurate CSS support)\
-✔ Much lower managed memory allocations\
-✔ More scalable in memory-sensitive environments\
-❌ ~2× slower\
-❌ Slightly more jitter
-
-Best for:
--   Complex HTML/CSS
--   User-generated templates
--   Pixel-perfect browser output
+Use benchmark output in your environment to compare trade-offs for your workloads.
 
 
 ## 🧠 Why this exists

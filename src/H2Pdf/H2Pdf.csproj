@@ -7,7 +7,7 @@
     <PackageId>H2Pdf</PackageId>
     <Version>1.0.0</Version>
     <Authors>H2Pdf contributors</Authors>
-    <RepositoryUrl>https://github.com/evilz/RazorPdf</RepositoryUrl>
+    <RepositoryUrl>https://github.com/evilz/H2Pdf</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Description>Generate production-ready PDFs from Razor components and C#.</Description>

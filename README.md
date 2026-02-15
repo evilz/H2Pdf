@@ -1,17 +1,23 @@
-# RazorPdf
+# RazorPdfKit
 
-> 🚀 Generate production-ready PDFs using Razor components and C# in minutes.
+> 🚀 Build production-ready PDFs from Razor components and C#.
 
 [![CI](https://github.com/evilz/RazorPdf/actions/workflows/ci.yml/badge.svg)](https://github.com/evilz/RazorPdf/actions/workflows/ci.yml)
-[![NuGet](https://img.shields.io/nuget/v/RazorPdf.svg)](https://www.nuget.org/packages/RazorPdf)
+[![NuGet](https://img.shields.io/nuget/v/RazorPdfKit.svg)](https://www.nuget.org/packages/RazorPdfKit)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/evilz/RazorPdf?style=social)](https://github.com/evilz/RazorPdf/stargazers)
-[![NuGet downloads](https://img.shields.io/nuget/dt/RazorPdf.svg)](https://www.nuget.org/packages/RazorPdf)
+[![NuGet downloads](https://img.shields.io/nuget/dt/RazorPdfKit.svg)](https://www.nuget.org/packages/RazorPdfKit)
 
+RazorPdfKit bridges modern .NET UI development and deterministic PDF generation. Author templates with `.razor` components, inject your services, and export consistent documents from code.
 
-RazorPdf bridges modern .NET UI development and deterministic PDF generation. Build PDFs with familiar `.razor` components, strongly typed C#, and dependency injection.
+## Why RazorPdfKit?
 
-## ✨ Features
+- **Use Razor as your template engine**: no extra templating language to learn.
+- **Stay type-safe**: pass strongly typed models and component parameters.
+- **Keep architecture clean**: integrate through DI and familiar ASP.NET Core patterns.
+- **Render across platforms**: Windows, Linux, and macOS support.
+
+## Features
 
 - Razor components as PDF templates
 - Fluent PDF document model API
@@ -19,9 +25,17 @@ RazorPdf bridges modern .NET UI development and deterministic PDF generation. Bu
 - ASP.NET Core dependency injection integration
 - Cross-platform rendering (Windows, Linux, macOS)
 
-## 🚀 Quick Start (30 seconds)
+## Requirements
 
-**Requirements:** .NET 10 SDK
+- .NET 10 SDK
+
+## Installation
+
+```bash
+dotnet add package RazorPdfKit
+```
+
+## Quick start
 
 ```bash
 git clone https://github.com/evilz/RazorPdf.git
@@ -36,23 +50,7 @@ Generated files:
 - `sample-output.pdf`
 - `invoice-sample.pdf`
 
-## 📦 Installation
-
-Install via NuGet:
-
-```bash
-dotnet add package RazorPdf
-```
-
-Or clone from source:
-
-```bash
-git clone https://github.com/evilz/RazorPdf.git
-cd RazorPdf
-dotnet build
-```
-
-## 📖 Usage
+## Basic usage
 
 ```csharp
 var services = new ServiceCollection();
@@ -65,39 +63,28 @@ var renderer = provider.GetRequiredService<PdfRenderer>();
 var parameters = new Dictionary<string, object?>
 {
     ["Name"] = "Developer",
-    ["Message"] = "This PDF was generated from a Razor component."
+    ["Message"] = "Generated with RazorPdfKit."
 };
 
 var document = await renderer.RenderToPdfAsync<HelloWorld>(parameters);
 renderer.SaveToPdf(document, "output.pdf");
 ```
 
-See [`samples/`](samples/) and [`examples/`](examples/) for complete usage patterns.
+## Documentation map
 
-## 🧠 Why this exists
+- [examples/README.md](examples/README.md): runnable examples and sample entry points
+- [Architecture.md](Architecture.md): component-to-document pipeline internals
+- [CONTRIBUTING.md](CONTRIBUTING.md): contribution flow and development setup
+- [ROADMAP.md](ROADMAP.md): planned enhancements and milestones
 
-Most PDF generation tools force teams to use low-level primitives or separate template systems. RazorPdf keeps PDF authoring in your existing .NET workflow with:
+## Project status
 
-- component-driven composition
-- familiar Razor syntax
-- predictable, code-reviewable output
+The library is actively evolving. Feedback, feature requests, and PRs are welcome.
 
-## 🛣 Roadmap
+## Contributing
 
-See [ROADMAP.md](ROADMAP.md).
+Start with [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## 🤝 Contributing
-
-We welcome PRs and ideas. Start with [CONTRIBUTING.md](CONTRIBUTING.md).
-
-## ⭐ Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=evilz/RazorPdf&type=Date)](https://star-history.com/#evilz/RazorPdf&Date)
-
-## 🏗 Architecture
-
-High-level internals are documented in [Architecture.md](Architecture.md).
-
-## 📄 License
+## License
 
 MIT — see [LICENSE](LICENSE).

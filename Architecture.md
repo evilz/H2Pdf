@@ -1,6 +1,6 @@
-# RazorPdf Architecture
+# RazorPdfKit Architecture
 
-RazorPdf is organized around a component-to-document pipeline.
+RazorPdfKit is organized around a component-to-document pipeline.
 
 ## Core flow
 

@@ -1,6 +1,6 @@
-# Contributing to RazorPdf
+# Contributing to RazorPdfKit
 
-Thanks for your interest in improving RazorPdf.
+Thanks for your interest in improving RazorPdfKit.
 
 ## Setup
 

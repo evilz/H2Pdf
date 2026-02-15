@@ -83,6 +83,101 @@ playwright install chromium
 dotnet run -c Release --project benchmarks/RazorPdf.Benchmarks
 ```
 
+**Environment**
+
+-   BenchmarkDotNet v0.14.0
+-   .NET 10.0.2 (RyuJIT, AVX2)
+-   Windows 11 x64
+-   GC: Concurrent Workstation
+
+
+### 🧪 Benchmarked Pipelines
+
+1.  **Playwright (Chromium)**
+    -   HTML rendered in headless Chromium
+    -   PDF generated via `Page.PdfAsync()`
+
+2.  **MigraDoc (via HtmlPdfRenderer)**
+    -   HTML → MigraDoc DOM
+    -   MigraDoc → PDF via `PdfDocumentRenderer`
+
+
+### 📈 Summary
+
+| Method | Mean | StdDev | Gen0 | Gen1 | Allocated |
+| --- | --- | --- | --- | --- | --- |
+| PlaywrightHtmlToPdfAsync | 9.231 ms | 0.196 ms | 15.63 | - | 188 KB |
+| MigraDoc_HtmlToPdf | 4.684 ms | 0.014 ms | 312.50 | 109.38 | 2.68 MB |
+
+### ⏱ Latency per PDF
+
+-   **MigraDoc**: ~4.68 ms
+
+-   **Playwright**: ~9.23 ms
+
+### 👉 MigraDoc is approximately **2× faster**
+
+Estimated theoretical throughput:
+
+-   MigraDoc → ~210 PDFs/sec
+-   Playwright → ~108 PDFs/sec
+
+### 📊 Stability (Jitter)
+
+| Pipeline | StdDev |
+| --- | --- |
+| MigraDoc | 0.014 ms |
+| Playwright | 0.196 ms |
+
+👉 MigraDoc is extremely deterministic\
+👉 Playwright shows small browser-engine variance (expected)
+
+### 🧠 Memory Behavior (Important!)
+
+| Pipeline | Allocated per PDF |
+| --- | --- |
+| Playwright | ~188 KB |
+| MigraDoc | ~2.68 MB |
+
+👉 MigraDoc allocates **~14× more memory per PDF**
+
+GC activity:
+
+-   MigraDoc → Triggers Gen0 + Gen1
+-   Playwright → Mostly Gen0 only
+
+### 🎯 Conclusions
+
+#### ✅ MigraDoc
+
+✔ Much faster\
+✔ Very stable\
+✔ Great for controlled layouts (invoices, reports)\
+❌ High memory allocations\
+❌ More GC pressure at scale\
+❌ Limited HTML/CSS support
+
+Best for:
+
+-   High-throughput backend services
+-   Deterministic rendering
+-   Controlled templates
+
+
+#### ✅ Playwright
+
+✔ Full Chromium rendering (accurate CSS support)\
+✔ Much lower managed memory allocations\
+✔ More scalable in memory-sensitive environments\
+❌ ~2× slower\
+❌ Slightly more jitter
+
+Best for:
+-   Complex HTML/CSS
+-   User-generated templates
+-   Pixel-perfect browser output
+
+
 ## 🧠 Why this exists
 
 Most PDF generation tools force teams to use low-level primitives or separate template systems. RazorPdf keeps PDF authoring in your existing .NET workflow with:

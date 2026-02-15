@@ -74,6 +74,14 @@ renderer.SaveToPdf(document, "output.pdf");
 
 See [`samples/`](samples/) and [`examples/`](examples/) for complete usage patterns.
 
+## ⚡ Benchmark
+
+Compare Playwright HTML-to-PDF with RazorPdf HTML-to-MigraDoc rendering:
+
+```bash
+dotnet run -c Release --project benchmarks/RazorPdf.Benchmarks
+```
+
 ## 🧠 Why this exists
 
 Most PDF generation tools force teams to use low-level primitives or separate template systems. RazorPdf keeps PDF authoring in your existing .NET workflow with:

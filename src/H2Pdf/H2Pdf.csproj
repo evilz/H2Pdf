@@ -5,8 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>H2Pdf</PackageId>
-    <Version>1.0.0</Version>
-    <Authors>H2Pdf contributors</Authors>
+    <Version>0.0.1</Version>
+    <Authors>Vincent B.</Authors>
     <RepositoryUrl>https://github.com/evilz/H2Pdf</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

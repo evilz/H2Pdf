@@ -1,6 +1,6 @@
-# RazorPdf Architecture
+# H2Pdf Architecture
 
-RazorPdf is organized around a component-to-document pipeline.
+H2Pdf is organized around a component-to-document pipeline.
 
 ## Core flow
 
@@ -23,6 +23,6 @@ The `Parsing/` namespace contains HTML/CSS traversal and style resolution primit
 
 ## Samples and tests
 
-- `samples/RazorPdf.Sample`: Razor component examples.
+- `samples/H2Pdf.Sample`: Razor component examples.
 - `samples/PlaywrightPdf`: additional invoice-generation sample.
-- `tests/RazorPdf.Tests`: unit/integration coverage for rendering behavior.
+- `tests/H2Pdf.Tests`: unit/integration coverage for rendering behavior.

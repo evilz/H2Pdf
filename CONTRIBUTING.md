@@ -1,12 +1,12 @@
-# Contributing to RazorPdf
+# Contributing to H2Pdf
 
-Thanks for your interest in improving RazorPdf.
+Thanks for your interest in improving H2Pdf.
 
 ## Setup
 
 ```bash
-git clone https://github.com/evilz/RazorPdf.git
-cd RazorPdf
+git clone https://github.com/evilz/H2Pdf.git
+cd H2Pdf
 dotnet build
 dotnet test
 ```

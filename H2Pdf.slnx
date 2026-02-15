@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/samples/">
+    <Project Path="samples/PlaywrightPdf/PlaywrightPdf.csproj" />
+    <Project Path="samples/H2Pdf.Sample/H2Pdf.Sample.csproj" />
+  </Folder>
+  <Folder Name="/benchmarks/">
+    <Project Path="benchmarks/H2Pdf.Benchmarks/H2Pdf.Benchmarks.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/H2Pdf/H2Pdf.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/H2Pdf.Tests/H2Pdf.Tests.csproj" />
+  </Folder>
+</Solution>

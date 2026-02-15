@@ -1,15 +1,15 @@
-# RazorPdf
+# H2Pdf
 
 > 🚀 Generate production-ready PDFs using Razor components and C# in minutes.
 
-[![CI](https://github.com/evilz/RazorPdf/actions/workflows/ci.yml/badge.svg)](https://github.com/evilz/RazorPdf/actions/workflows/ci.yml)
-[![NuGet](https://img.shields.io/nuget/v/RazorPdf.svg)](https://www.nuget.org/packages/RazorPdf)
+[![CI](https://github.com/evilz/H2Pdf/actions/workflows/ci.yml/badge.svg)](https://github.com/evilz/H2Pdf/actions/workflows/ci.yml)
+[![NuGet](https://img.shields.io/nuget/v/H2Pdf.svg)](https://www.nuget.org/packages/H2Pdf)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/evilz/RazorPdf?style=social)](https://github.com/evilz/RazorPdf/stargazers)
-[![NuGet downloads](https://img.shields.io/nuget/dt/RazorPdf.svg)](https://www.nuget.org/packages/RazorPdf)
+[![GitHub stars](https://img.shields.io/github/stars/evilz/H2Pdf?style=social)](https://github.com/evilz/H2Pdf/stargazers)
+[![NuGet downloads](https://img.shields.io/nuget/dt/H2Pdf.svg)](https://www.nuget.org/packages/H2Pdf)
 
 
-RazorPdf bridges modern .NET UI development and deterministic PDF generation. Build PDFs with familiar `.razor` components, strongly typed C#, and dependency injection.
+H2Pdf bridges modern .NET UI development and deterministic PDF generation. Build PDFs with familiar `.razor` components, strongly typed C#, and dependency injection.
 
 ## ✨ Features
 
@@ -24,10 +24,10 @@ RazorPdf bridges modern .NET UI development and deterministic PDF generation. Bu
 **Requirements:** .NET 10 SDK
 
 ```bash
-git clone https://github.com/evilz/RazorPdf.git
-cd RazorPdf
+git clone https://github.com/evilz/H2Pdf.git
+cd H2Pdf
 dotnet build
-cd samples/RazorPdf.Sample
+cd samples/H2Pdf.Sample
 dotnet run
 ```
 
@@ -41,14 +41,14 @@ Generated files:
 Install via NuGet:
 
 ```bash
-dotnet add package RazorPdf
+dotnet add package H2Pdf
 ```
 
 Or clone from source:
 
 ```bash
-git clone https://github.com/evilz/RazorPdf.git
-cd RazorPdf
+git clone https://github.com/evilz/H2Pdf.git
+cd H2Pdf
 dotnet build
 ```
 
@@ -57,7 +57,7 @@ dotnet build
 ```csharp
 var services = new ServiceCollection();
 services.AddLogging();
-services.AddRazorPdf();
+services.AddH2Pdf();
 
 var provider = services.BuildServiceProvider();
 var renderer = provider.GetRequiredService<PdfRenderer>();
@@ -76,12 +76,12 @@ See [`samples/`](samples/) and [`examples/`](examples/) for complete usage patte
 
 ## ⚡ Benchmark
 
-Compare Playwright HTML-to-PDF with RazorPdf HTML-to-MigraDoc rendering:
+Compare Playwright HTML-to-PDF with H2Pdf HTML-to-MigraDoc rendering:
 
 ```bash
-dotnet build benchmarks/RazorPdf.Benchmarks
-pwsh benchmarks/RazorPdf.Benchmarks/bin/Debug/net10.0/playwright.ps1 install chromium
-dotnet run -c Release --project benchmarks/RazorPdf.Benchmarks
+dotnet build benchmarks/H2Pdf.Benchmarks
+pwsh benchmarks/H2Pdf.Benchmarks/bin/Debug/net10.0/playwright.ps1 install chromium
+dotnet run -c Release --project benchmarks/H2Pdf.Benchmarks
 ```
 
 **Environment**
@@ -142,7 +142,7 @@ Use benchmark output in your environment to compare trade-offs for your workload
 
 ## 🧠 Why this exists
 
-Most PDF generation tools force teams to use low-level primitives or separate template systems. RazorPdf keeps PDF authoring in your existing .NET workflow with:
+Most PDF generation tools force teams to use low-level primitives or separate template systems. H2Pdf keeps PDF authoring in your existing .NET workflow with:
 
 - component-driven composition
 - familiar Razor syntax
@@ -158,7 +158,7 @@ We welcome PRs and ideas. Start with [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## ⭐ Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=evilz/RazorPdf&type=Date)](https://star-history.com/#evilz/RazorPdf&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=evilz/H2Pdf&type=Date)](https://star-history.com/#evilz/H2Pdf&Date)
 
 ## 🏗 Architecture
 

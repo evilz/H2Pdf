@@ -1,5 +1,7 @@
 # H2Pdf
 
+H2Pdf supports both .NET 8 LTS and .NET 10. NuGet selects the matching target automatically.
+
 > 🚀 Generate production-ready PDFs using Razor components and C# in minutes.
 
 [![CI](https://github.com/evilz/H2Pdf/actions/workflows/ci.yml/badge.svg)](https://github.com/evilz/H2Pdf/actions/workflows/ci.yml)

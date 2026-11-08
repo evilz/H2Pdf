@@ -1,5 +1,7 @@
 # H2Pdf
 
+H2Pdf targets .NET 8 and .NET 10. NuGet selects the matching target automatically. Microsoft support for .NET 8 ends on November 10, 2026; use .NET 10 for continued security updates. See the [.NET support policy](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core).
+
 > 🚀 Generate production-ready PDFs using Razor components and C# in minutes.
 
 [![CI](https://github.com/evilz/H2Pdf/actions/workflows/ci.yml/badge.svg)](https://github.com/evilz/H2Pdf/actions/workflows/ci.yml)

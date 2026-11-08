@@ -20,17 +20,11 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
-      - name: Restore
-        run: dotnet restore H2Pdf.slnx
-
-      - name: Audit transitive NuGet dependencies
-        run: |
-          report="$(dotnet list H2Pdf.slnx package --vulnerable --include-transitive)"
-          echo "$report"
-          if echo "$report" | grep -q "has the following vulnerable packages"; then
-            echo "Vulnerable NuGet dependencies detected."
-            exit 1
-          fi
+      - name: Restore and audit transitive dependencies
+        run: >-
+          dotnet restore H2Pdf.slnx
+          -p:NuGetAudit=true -p:NuGetAuditMode=all
+          '-p:WarningsAsErrors=NU1900%3BNU1901%3BNU1902%3BNU1903%3BNU1904%3BNU1905'
 
       - name: Build
         run: dotnet build H2Pdf.slnx --configuration Release --no-restore

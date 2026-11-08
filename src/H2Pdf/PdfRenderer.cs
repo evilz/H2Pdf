@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MigraDocCore.DocumentObjectModel;
-using MigraDocCore.Rendering;
+using MigraDoc.DocumentObjectModel;
+using MigraDoc.Rendering;
 
 namespace H2Pdf;
 
@@ -88,6 +88,7 @@ public class PdfRenderer
         
         _logger?.LogInformation("Saving PDF to {FilePath}", filePath);
         
+        PdfFontResolver.EnsureInitialized();
         var pdfRenderer = new PdfDocumentRenderer
         {
             Document = document

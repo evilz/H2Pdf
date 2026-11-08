@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using MigraDocCore.DocumentObjectModel;
+using MigraDoc.DocumentObjectModel;
 
 namespace H2Pdf;
 

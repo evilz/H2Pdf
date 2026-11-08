@@ -1,7 +1,7 @@
 // ------------------------------------------------------------
 // Benchmark: HTML -> PDF pipeline comparisons
 //   1) Playwright (Chromium) HTML rendering + PDF generation
-//   2) MigraDocCore via a custom HtmlPdfRenderer (HTML -> MigraDoc DOM -> PDF)
+//   2) MigraDoc via a custom HtmlPdfRenderer (HTML -> MigraDoc DOM -> PDF)
 // ------------------------------------------------------------
 //
 // Notes / choices for benchmark quality:
@@ -20,7 +20,7 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using Microsoft.Playwright;
-using MigraDocCore.Rendering;
+using MigraDoc.Rendering;
 using H2Pdf;
 
 BenchmarkRunner.Run<PdfPipelineBenchmarks>();
@@ -84,6 +84,9 @@ public class PdfPipelineBenchmarks
     [GlobalSetup]
     public async Task SetupAsync()
     {
+        if (PdfSharp.Fonts.GlobalFontSettings.FontResolver is null)
+            PdfSharp.Fonts.GlobalFontSettings.FontResolver = new FontResolution.PdfSharp.FontResolverPdfSharp();
+
         // Create Playwright driver (starts the Playwright connection).
         _playwright = await Playwright.CreateAsync();
         

@@ -11,6 +11,10 @@
 
 H2Pdf bridges modern .NET UI development and deterministic PDF generation. Build PDFs with familiar `.razor` components, strongly typed C#, and dependency injection.
 
+### Migration from MigraDocCore
+
+H2Pdf now uses PDFsharp-MigraDoc 6.2.4. Public methods that accepted or returned `MigraDocCore.DocumentObjectModel` types now use `MigraDoc.DocumentObjectModel` types; callers should update their `using` directives and rebuild. PDFsharp's font resolver is process-wide. H2Pdf installs a system font resolver when none has been configured; applications may set `PdfSharp.Fonts.GlobalFontSettings.FontResolver` before rendering to use their own resolver. PDF rendering requires suitable fonts to be available on the host.
+
 ## ✨ Features
 
 - Razor components as PDF templates

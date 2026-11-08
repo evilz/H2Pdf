@@ -1,8 +1,8 @@
 using AngleSharp.Html.Parser;
 using Microsoft.Extensions.Logging;
-using MigraDocCore.Rendering;
+using MigraDoc.Rendering;
 using H2Pdf.Parsing;
-using MigraDocDocument = MigraDocCore.DocumentObjectModel.Document;
+using MigraDocDocument = MigraDoc.DocumentObjectModel.Document;
 
 namespace H2Pdf;
 
@@ -72,6 +72,7 @@ public class HtmlPdfRenderer
 
         _logger?.LogInformation("Saving PDF to {FilePath}", filePath);
 
+        PdfFontResolver.EnsureInitialized();
         var pdfRenderer = new PdfDocumentRenderer
         {
             Document = document

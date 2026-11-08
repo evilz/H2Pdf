@@ -1,11 +1,8 @@
 using System;
 using System.Globalization;
 using System.Linq;
-using MigraDocCore.DocumentObjectModel;
-using MigraDocCore.DocumentObjectModel.Tables;
-using PdfSharpCore.Utils;
-using SixLabors.ImageSharp.PixelFormats;
-using ImageSource = MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes.ImageSource;
+using MigraDoc.DocumentObjectModel;
+using MigraDoc.DocumentObjectModel.Tables;
 
 namespace H2Pdf;
 
@@ -16,15 +13,11 @@ namespace H2Pdf;
 public static class PdfDocumentModelRenderer
 {
     private const double DefaultContentWidthCm = 18.88;
-    private static bool _imageSourceInitialized;
-    private static readonly object _lock = new();
 
     public static Document BuildDocument(PdfDocumentModel model)
     {
         if (model == null)
             throw new ArgumentNullException(nameof(model));
-
-        EnsureImageSource();
 
         var document = new Document();
 
@@ -204,8 +197,7 @@ public static class PdfDocumentModelRenderer
     {
         try
         {
-            var imageKey = ImageSource.FromFile(source);
-            var image = paragraph.AddImage(imageKey);
+            var image = paragraph.AddImage(source);
             if (widthPt.HasValue)
                 image.Width = Unit.FromPoint(widthPt.Value);
             if (heightPt.HasValue)
@@ -501,22 +493,4 @@ public static class PdfDocumentModelRenderer
         return Unit.FromPoint(widthPt).Centimeter;
     }
 
-    private static void EnsureImageSource()
-    {
-        if (_imageSourceInitialized) return;
-        lock (_lock)
-        {
-            if (_imageSourceInitialized) return;
-            try
-            {
-                if (ImageSource.ImageSourceImpl == null)
-                    ImageSource.ImageSourceImpl = new ImageSharpImageSource<Rgba32>();
-            }
-            catch
-            {
-                // Image support unavailable; images will be skipped.
-            }
-            _imageSourceInitialized = true;
-        }
-    }
 }

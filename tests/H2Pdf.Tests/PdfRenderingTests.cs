@@ -1,13 +1,37 @@
 using System.Linq;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
-using MigraDocCore.DocumentObjectModel;
-using MigraDocCore.DocumentObjectModel.Tables;
+using MigraDoc.DocumentObjectModel;
+using MigraDoc.DocumentObjectModel.Tables;
 
 namespace H2Pdf.Tests;
 
 public class PdfRenderingTests
 {
+    [Fact]
+    public void SaveToPdf_ImageModel_EmbedsImageInPdf()
+    {
+        var section = new PdfSectionModel();
+        section.Blocks.Add(new PdfImageModel { Source = Path.Combine(AppContext.BaseDirectory, "logo.png") });
+        var model = new PdfDocumentModel();
+        model.Sections.Add(section);
+        var document = PdfDocumentModelRenderer.BuildDocument(model);
+        var paragraph = Assert.IsType<Paragraph>(document.Sections[0].Elements[0]);
+        Assert.Single(paragraph.Elements.OfType<MigraDoc.DocumentObjectModel.Shapes.Image>());
+        var output = Path.Combine(Path.GetTempPath(), $"h2pdf-{Guid.NewGuid():N}.pdf");
+        try
+        {
+            using var services = new ServiceCollection().BuildServiceProvider();
+            new PdfRenderer(services).SaveToPdf(document, output);
+            var pdf = System.Text.Encoding.Latin1.GetString(File.ReadAllBytes(output));
+            Assert.Matches(@"/Subtype\s*/Image\b", pdf);
+        }
+        finally
+        {
+            File.Delete(output);
+        }
+    }
+
     [Fact]
     public void BuildDocument_ModelWithHeadingAndParagraph_RendersContent()
     {

@@ -1,11 +1,30 @@
 using System.Linq;
-using MigraDocCore.DocumentObjectModel;
-using MigraDocCore.DocumentObjectModel.Tables;
+using MigraDoc.DocumentObjectModel;
+using MigraDoc.DocumentObjectModel.Tables;
 
 namespace H2Pdf.Tests;
 
 public class HtmlPdfRendererTests
 {
+    [Fact]
+    public void SaveToPdf_HtmlImage_EmbedsImageInPdf()
+    {
+        var renderer = new HtmlPdfRenderer();
+        var document = renderer.Render("<p>Logo <img src='logo.png'></p>",
+            new HtmlPdfOptions { BasePath = AppContext.BaseDirectory });
+        var path = Path.Combine(Path.GetTempPath(), $"h2pdf-html-{Guid.NewGuid():N}.pdf");
+        try
+        {
+            renderer.SaveToPdf(document, path);
+            var pdf = System.Text.Encoding.Latin1.GetString(File.ReadAllBytes(path));
+            Assert.Matches(@"/Subtype\s*/Image\b", pdf);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
     [Fact]
     public void Render_BuildsDocumentWithHeadingAndTable()
     {

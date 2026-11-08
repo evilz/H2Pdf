@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\H2Pdf\H2Pdf.csproj" />
+    <None Include="..\..\samples\logo.png" Link="logo.png" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>
